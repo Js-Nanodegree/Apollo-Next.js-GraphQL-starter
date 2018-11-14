@@ -1,0 +1,22 @@
+{
+  "name": "Apollo-Server-GraphQL-starter",
+  "version": "1.0.0",
+  "description": "A lightweight GraphQL API starter pack",
+  "keywords": [
+    "express",
+    "API",
+    "MongoDB",
+    "mongoose",
+    "GraphQL"
+  ],
+  "license": "MIT",
+  "url": "https://github.com/tomanagle/Apollo-Server-GraphQL-starter",
+  "author": "Tom Nagle",
+  "email": "tomanagle@gmail.com",
+  "scripts": {
+    "dev:server": "npm run --prefix server dev",
+    "dev:client": "npm --prefix client start",
+    "deploy": "npm run --prefix server start && npm run --prefix client build",
+    "setup": "npm run --prefix server setup"
+  }
+}

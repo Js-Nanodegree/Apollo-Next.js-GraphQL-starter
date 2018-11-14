@@ -1,0 +1,5 @@
+{
+  "rules": [
+    {"pathname": "/graphql", "method":["GET", "POST", "OPTIONS"], "dest": "http://localhost:8080"}
+  ]
+}

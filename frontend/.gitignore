@@ -1,0 +1,7 @@
+_STORE
+node_modules
+*~
+.next
+npm-debug.log
+yarn.lock
+.idea

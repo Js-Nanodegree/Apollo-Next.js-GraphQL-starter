@@ -1,0 +1,25 @@
+input RegisterInput {
+    subscribeToken: String!
+    firstName: String!
+    _id: String!
+    lastName: String!
+    password: String!
+    passwordRepeat: String!
+}
+
+input SubscribeInput {
+    email: String!
+}
+
+input LoginInput {
+    email: String!
+    password: String!
+}
+
+input CreateContentInput{
+    url: String
+}
+
+input GetContentInput {
+    UCIDs: [String]
+}
