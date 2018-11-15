@@ -6,10 +6,11 @@ import Subscribe from '../models/subscribe.model'
 import { DEV_URL, PROD_URL } from '../config/settings'
 import { IS_DEBUG, SESSION_DURATION } from '../config/env'
 import { SIGNING_KEY } from '../config/secrets'
-
 import { subscribeMailer } from '../mailers'
 
-function generateToken (_, {_id}) {
+import { NoUserError, InvalidEmailPasswordError } from './errors/auth.errors';
+
+function generateToken(_, { _id }) {
   const claims = {
     iss: IS_DEBUG ? DEV_URL : PROD_URL,  // The URL of your service - update paths in ../config/settings
     sub: _id  // The UID of the user in your system - MongoDB _id
@@ -23,8 +24,8 @@ function generateToken (_, {_id}) {
   return jwt.compact()
 }
 
-function deactivateSubscribeToken (_, {email}) {
-  return Subscribe.findOneAndUpdate({email}, {
+function deactivateSubscribeToken(_, { email }) {
+  return Subscribe.findOneAndUpdate({ email }, {
     $set: {
       active: false
     }
@@ -35,7 +36,7 @@ function deactivateSubscribeToken (_, {email}) {
   })
 }
 
-async function register (_, {subscribeToken, firstName, lastName, _id, password, passwordRepeat}, context) {
+async function register(_, { subscribeToken, firstName, lastName, _id, password, passwordRepeat }, context) {
   if (password !== passwordRepeat) {
     return Error('Passwords do not match')
   }
@@ -61,34 +62,38 @@ async function register (_, {subscribeToken, firstName, lastName, _id, password,
   }
 
   // Make sure you already use create here so the password is hashed with Mongoose's pre save middleware
-  return User.create({email: subscription.email, firstName, lastName, password})
+  return User.create({ email: subscription.email, firstName, lastName, password })
     .then(async (user) => {
       const _id = user._id
-      const token = await generateToken(null, {_id})
+      const token = await generateToken(null, { _id })
 
       // Change the active param to false on the subscribe token
-      deactivateSubscribeToken(_, {email: user.email})
+      deactivateSubscribeToken(_, { email: user.email })
 
       // Set the token in a cookie
-      context.res.cookie('token', token, {maxAge: 3.154e+10, httpOnly: true})
+      context.res.cookie('token', token, { maxAge: 3.154e+10, httpOnly: true })
 
-      return {token}
+      return { token }
     }).catch((error) => {
       return error
     })
 }
 
-async function login (_, {email, password}, context) {
-  const user = await User.findOne({email})
+async function login(_, { email, password }, context) {
+  const user = await User.findOne({ email })
     .then((data) => {
-      return data
+      return data;
     }).catch((error) => {
-      throw error
-    })
+      console.log({ error });
+      throw error;
+    });
 
-  // You can change the message to something more descriptive but you risk exposing emails
   if (!user) {
-    return {message: 'Invalid mail or password.', valid: false}
+    throw new NoUserError({
+      data: {
+        email
+      }
+    });
   }
 
   const isMatch = await user.comparePassword(password)
@@ -99,19 +104,19 @@ async function login (_, {email, password}, context) {
     })
 
   if (!isMatch) {
-    return Error('Invalid email or password')
+    throw new InvalidEmailPasswordError();
   }
 
-  const token = await generateToken(_, {_id: user._id});
+  const token = await generateToken(_, { _id: user._id });
 
-  context.res.cookie('token', token, {maxAge: SESSION_DURATION, httpOnly: true})
+  context.res.cookie('token', token, { maxAge: SESSION_DURATION, httpOnly: true })
 
-  return {token}
+  return { token }
 }
 
-async function subscribe (_, {email}) {
+async function subscribe(_, { email }) {
 
-  const subscriber = await Subscribe.findOne({email})
+  const subscriber = await Subscribe.findOne({ email })
     .then((data) => {
       return data
     }).catch((error) => {
@@ -124,18 +129,18 @@ async function subscribe (_, {email}) {
 
   const token = crypto.randomBytes(18).toString('hex')
 
-  return Subscribe.create({email, token})
+  return Subscribe.create({ email, token })
     .then((data) => {
       // Send a verification email to the user
-      subscribeMailer({email, id: data._id, token})
+      subscribeMailer({ email, id: data._id, token })
 
-      return {message: 'Successfully subscribed'}
+      return { message: 'Successfully subscribed' }
     }).catch((error) => {
       return error
     })
 }
 
-export async function getGithubToken (githubCode) {
+export async function getGithubToken(githubCode) {
   const endpoint = 'https://github.com/login/oauth/access_token'
 
   const data = await axios.post(endpoint, {
@@ -153,7 +158,7 @@ export async function getGithubToken (githubCode) {
   return data.access_token
 }
 
-export async function getGithubUser (githubToken) {
+export async function getGithubUser(githubToken) {
   const endpoint = `https://api.github.com/user?access_token=${githubToken}`
   return await axios.get(endpoint)
     .then(response => {
@@ -164,8 +169,8 @@ export async function getGithubUser (githubToken) {
     })
 }
 
-async function gitHubAuth (_, {GitHubCode}, context) {
-  console.log({GitHubCode})
+async function gitHubAuth(_, { GitHubCode }, context) {
+  console.log({ GitHubCode })
   const githubToken = await getGithubToken(GitHubCode)
   console.log('githubToken', githubToken)
   if (!githubToken) {
@@ -174,9 +179,9 @@ async function gitHubAuth (_, {GitHubCode}, context) {
 
   const githubUser = await getGithubUser(githubToken)
 
-  console.log({githubToken})
+  console.log({ githubToken })
 
-  console.log({githubUser})
+  console.log({ githubUser })
 
   return {
     // token: jwt.sign({userId: user.id}, SIGNING_KEY),

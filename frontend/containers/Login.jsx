@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react'
 import PropTypes from 'prop-types'
-
+import gql from 'graphql-tag';
 import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
@@ -10,20 +10,21 @@ class LoginContainer extends PureComponent {
   static propTypes = {}
 
   render() {
-    const { error, handleLogin, message, email, handleChange, password, loggingIn } = this.props
+    const { error, handleLogin, email, handleChange, password, loading } = this.props;
     return (
       <Fragment>
         <div className="content-middle">
           <form className="login-form-wrapper"
-
+            onSubmit={(e) => {
+              e.preventDefault();
+              return handleLogin();
+            }}
           >
             <Paper>
               <div className="login-form__inner">
                 <h1>Login</h1>
-                {error && <h2>{error}</h2>}
-                {message && <h2>{message}</h2>}
-                {loggingIn && <h2>Please wait...</h2>}
-
+                {error && <h2>{JSON.stringify(error)}</h2>}
+                {loading && <h2>Please wait...</h2>}
 
                 <TextField
                   name='email'
@@ -55,6 +56,7 @@ class LoginContainer extends PureComponent {
               </div>
             </Paper>
           </form>
+
         </div>
         <style jsx>{`
       .content-middle{
