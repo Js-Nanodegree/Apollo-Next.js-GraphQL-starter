@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react'
 import PropTypes from 'prop-types'
+import Link from 'next/link';
 import gql from 'graphql-tag';
 import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField'
@@ -54,6 +55,12 @@ class LoginContainer extends PureComponent {
                 >Login
                 </Button>
               </div>
+              <Link
+                href='/register'
+              >
+                <a>Register</a>
+              </Link>
+
             </Paper>
           </form>
 

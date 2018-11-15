@@ -15,7 +15,9 @@ function normalizePort(val) {
 
 export const port = normalizePort(process.env.PORT || '8080');
 
-export const db = process.env.MONGODB_URI || 'mongodb://localhost:27017/ucid';
+const DB_NAME = 'my-db';
+
+export const db = process.env.MONGODB_URI || `mongodb://localhost:27017/${DB_NAME}`;
 
 // The URL of the development client
 export const DEV_URL = `http://localhost:3000`;
