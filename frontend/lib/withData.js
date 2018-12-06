@@ -1,17 +1,25 @@
 import { ApolloLink, Observable } from 'apollo-link';
+import {
+  CLIENT_PATH,
+  GRAPHQL_ENDPOINT,
+  SERVER_PATH,
+  WS_PATH
+} from '../config/env';
 
 import { ApolloClient } from 'apollo-client';
 import { BatchHttpLink } from 'apollo-link-batch-http';
-import { GRAPHQL_ENDPOINT } from '../config/env';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { WebSocketLink } from 'apollo-link-ws';
 import { createPersistedQueryLink } from 'apollo-link-persisted-queries';
+import { getMainDefinition } from 'apollo-utilities';
 import { onError } from 'apollo-link-error';
+import { split } from 'apollo-link';
 import withApollo from 'next-with-apollo';
 import { withClientState } from 'apollo-link-state';
 
 function createClient({ headers }) {
   const cache = new InMemoryCache();
-
+  const ssrMode = !process.browser;
   const request = async operation => {
     operation.setContext({
       http: {
@@ -43,14 +51,44 @@ function createClient({ headers }) {
       })
   );
 
+  const httpLink = new BatchHttpLink({
+    uri: ssrMode ? SERVER_PATH : GRAPHQL_ENDPOINT,
+    credentials: 'include'
+  });
+
+  // Make sure the wsLink is only created on the browser. The server doesn't have a native implemention for websockets
+  const wsLink = process.browser
+    ? new WebSocketLink({
+        uri: WS_PATH,
+        options: {
+          reconnect: true
+        }
+      })
+    : () => {
+        console.log('Is server');
+      };
+
+  // Let Apollo figure out if the request is over ws or http
+  const terminatingLink = split(
+    ({ query }) => {
+      const { kind, operation } = getMainDefinition(query);
+      return (
+        kind === 'OperationDefinition' && operation === 'subscription'
+        //  && process.browser
+      );
+    },
+    wsLink,
+    httpLink
+  );
+
   return new ApolloClient({
     link: ApolloLink.from([
       onError(({ graphQLErrors, networkError }) => {
         if (graphQLErrors) {
-          console.log({ graphQLErrors });
+          console.error({ graphQLErrors });
         }
         if (networkError) {
-          console.log('Logout user');
+          console.error({ networkError });
         }
       }),
       requestLink,
@@ -66,13 +104,19 @@ function createClient({ headers }) {
             }
           }
         },
-        cache
+        cache,
+        ssrMode // Disables forceFetch on the server (so queries are only run once)
       }),
+
+      // Push the links into the Apollo client
       createPersistedQueryLink().concat(
-        new BatchHttpLink({
-          uri: GRAPHQL_ENDPOINT,
-          credentials: 'include'
-        })
+        // New config
+        terminatingLink
+        // Old config
+        // new BatchHttpLink({
+        //   uri: GRAPHQL_ENDPOINT,
+        //   credentials: 'include'
+        // })
       )
     ]),
     cache
