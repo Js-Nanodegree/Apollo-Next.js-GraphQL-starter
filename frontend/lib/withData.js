@@ -1,43 +1,47 @@
-import withApollo from 'next-with-apollo';
+import { ApolloLink, Observable } from 'apollo-link';
+
 import { ApolloClient } from 'apollo-client';
+import { BatchHttpLink } from 'apollo-link-batch-http';
+import { GRAPHQL_ENDPOINT } from '../config/env';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createPersistedQueryLink } from 'apollo-link-persisted-queries';
-import { BatchHttpLink } from 'apollo-link-batch-http';
 import { onError } from 'apollo-link-error';
+import withApollo from 'next-with-apollo';
 import { withClientState } from 'apollo-link-state';
-import { ApolloLink, Observable } from 'apollo-link';
-import { GRAPHQL_ENDPOINT } from '../config/env';
 
 function createClient({ headers }) {
   const cache = new InMemoryCache();
 
-  const request = async (operation) => {
+  const request = async operation => {
     operation.setContext({
       http: {
         includeExtensions: true,
-        includeQuery: false,
+        includeQuery: false
       },
       headers
     });
   };
 
-  const requestLink = new ApolloLink((operation, forward) => new Observable((observer) => {
-    let handle;
-    Promise.resolve(operation)
-      .then(oper => request(oper))
-      .then(() => {
-        handle = forward(operation).subscribe({
-          next: observer.next.bind(observer),
-          error: observer.error.bind(observer),
-          complete: observer.complete.bind(observer),
-        });
-      })
-      .catch(observer.error.bind(observer));
+  const requestLink = new ApolloLink(
+    (operation, forward) =>
+      new Observable(observer => {
+        let handle;
+        Promise.resolve(operation)
+          .then(oper => request(oper))
+          .then(() => {
+            handle = forward(operation).subscribe({
+              next: observer.next.bind(observer),
+              error: observer.error.bind(observer),
+              complete: observer.complete.bind(observer)
+            });
+          })
+          .catch(observer.error.bind(observer));
 
-    return () => {
-      if (handle) handle.unsubscribe();
-    };
-  }));
+        return () => {
+          if (handle) handle.unsubscribe();
+        };
+      })
+  );
 
   return new ApolloClient({
     link: ApolloLink.from([
@@ -64,10 +68,12 @@ function createClient({ headers }) {
         },
         cache
       }),
-      createPersistedQueryLink().concat(new BatchHttpLink({
-        uri: GRAPHQL_ENDPOINT,
-        credentials: 'include'
-      }))
+      createPersistedQueryLink().concat(
+        new BatchHttpLink({
+          uri: GRAPHQL_ENDPOINT,
+          credentials: 'include'
+        })
+      )
     ]),
     cache
   });

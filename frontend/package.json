@@ -5,9 +5,10 @@
   "version": "0.0.2",
   "description": "",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development && node server.js",
+    "dev": "node server.js",
     "build": "next build",
-    "start": "cross-env NODE_ENV=production pm2 start process.json",
+    "start": "pm2 start process.json",
+    "test": "jest --watch",
     "deploy": "yarn build && yarn start"
   },
   "author": "Procurement Leaders",

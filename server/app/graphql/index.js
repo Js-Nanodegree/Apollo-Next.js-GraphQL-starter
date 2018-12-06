@@ -1,11 +1,14 @@
-import { ApolloServer } from "apollo-server-express";
-import { formatError } from "apollo-errors";
+import { ApolloServer } from 'apollo-server-express';
+import { PubSub } from 'apollo-server-express';
+import { formatError } from 'apollo-errors';
 import resolvers from './resolvers';
 import typeDefs from './schema';
 
 const options = {
   formatError
 };
+
+export const pubsub = new PubSub();
 
 export default new ApolloServer({
   typeDefs,
@@ -21,6 +24,6 @@ export default new ApolloServer({
     return response;
   },
   context: ({ req, res }) => {
-    return { req, res }
+    return { req, res };
   }
 });

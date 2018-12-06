@@ -97,19 +97,31 @@ module.exports =
 /*!***********************!*\
   !*** ./config/env.js ***!
   \***********************/
-/*! exports provided: IS_DEBUG, GRAPHQL_ENDPOINT */
+/*! exports provided: SERVER_PATH, CLIENT_PATH, IS_DEBUG, GRAPHQL_ENDPOINT, WS_PATH, CLOUDINARY_NAME, CLOUDINARY_UPLOAD_URL */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SERVER_PATH", function() { return SERVER_PATH; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CLIENT_PATH", function() { return CLIENT_PATH; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IS_DEBUG", function() { return IS_DEBUG; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GRAPHQL_ENDPOINT", function() { return GRAPHQL_ENDPOINT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WS_PATH", function() { return WS_PATH; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CLOUDINARY_NAME", function() { return CLOUDINARY_NAME; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CLOUDINARY_UPLOAD_URL", function() { return CLOUDINARY_UPLOAD_URL; });
 // PROXY_PATH is apth that your micro-proxy is listening to. This is is used for development only to replicate a real proxy like nginx
 var DEVELOPMENT_PATH = 'http://localhost:3000/graphql'; // The path to your application in production. This should point to your GraphQL API
 
-var PRODUCTION_PATH = 'https://example.com/graphql';
+var PRODUCTION_PATH = 'https://beta.pleventhub.com/graphql';
+var SERVER_PATH = 'http://localhost:4000/graphql';
+var CLIENT_PATH = 'https://example.com/graphql';
+var DEVELOPMENT_WS_PATH = 'ws://localhost:4000/graphql';
+var PRODUCTION_WS_PATH = 'wss://example.comgraphql';
 var IS_DEBUG = "development" !== 'production';
 var GRAPHQL_ENDPOINT = IS_DEBUG ? DEVELOPMENT_PATH : PRODUCTION_PATH;
+var WS_PATH = IS_DEBUG ? DEVELOPMENT_WS_PATH : PRODUCTION_WS_PATH;
+var CLOUDINARY_NAME = 'matchandmeet';
+var CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/".concat(CLOUDINARY_NAME, "/upload");
 
 /***/ }),
 
@@ -176,23 +188,23 @@ function getPageContext() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "@babel/runtime/regenerator");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var next_with_apollo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next-with-apollo */ "next-with-apollo");
-/* harmony import */ var next_with_apollo__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_with_apollo__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var apollo_link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! apollo-link */ "apollo-link");
+/* harmony import */ var apollo_link__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(apollo_link__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var apollo_client__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! apollo-client */ "apollo-client");
 /* harmony import */ var apollo_client__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(apollo_client__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var apollo_cache_inmemory__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! apollo-cache-inmemory */ "apollo-cache-inmemory");
-/* harmony import */ var apollo_cache_inmemory__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(apollo_cache_inmemory__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var apollo_link_persisted_queries__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! apollo-link-persisted-queries */ "apollo-link-persisted-queries");
-/* harmony import */ var apollo_link_persisted_queries__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(apollo_link_persisted_queries__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var apollo_link_batch_http__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! apollo-link-batch-http */ "apollo-link-batch-http");
-/* harmony import */ var apollo_link_batch_http__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(apollo_link_batch_http__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var apollo_link_error__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! apollo-link-error */ "apollo-link-error");
-/* harmony import */ var apollo_link_error__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(apollo_link_error__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var apollo_link_state__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! apollo-link-state */ "apollo-link-state");
-/* harmony import */ var apollo_link_state__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(apollo_link_state__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var apollo_link__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! apollo-link */ "apollo-link");
-/* harmony import */ var apollo_link__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(apollo_link__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _config_env__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../config/env */ "./config/env.js");
+/* harmony import */ var apollo_link_batch_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! apollo-link-batch-http */ "apollo-link-batch-http");
+/* harmony import */ var apollo_link_batch_http__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(apollo_link_batch_http__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _config_env__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../config/env */ "./config/env.js");
+/* harmony import */ var apollo_cache_inmemory__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! apollo-cache-inmemory */ "apollo-cache-inmemory");
+/* harmony import */ var apollo_cache_inmemory__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(apollo_cache_inmemory__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var apollo_link_persisted_queries__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! apollo-link-persisted-queries */ "apollo-link-persisted-queries");
+/* harmony import */ var apollo_link_persisted_queries__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(apollo_link_persisted_queries__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var apollo_link_error__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! apollo-link-error */ "apollo-link-error");
+/* harmony import */ var apollo_link_error__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(apollo_link_error__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var next_with_apollo__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! next-with-apollo */ "next-with-apollo");
+/* harmony import */ var next_with_apollo__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(next_with_apollo__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var apollo_link_state__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! apollo-link-state */ "apollo-link-state");
+/* harmony import */ var apollo_link_state__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(apollo_link_state__WEBPACK_IMPORTED_MODULE_9__);
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -211,7 +223,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 function createClient(_ref) {
   var headers = _ref.headers;
-  var cache = new apollo_cache_inmemory__WEBPACK_IMPORTED_MODULE_3__["InMemoryCache"]();
+  var cache = new apollo_cache_inmemory__WEBPACK_IMPORTED_MODULE_5__["InMemoryCache"]();
 
   var request =
   /*#__PURE__*/
@@ -244,8 +256,8 @@ function createClient(_ref) {
     };
   }();
 
-  var requestLink = new apollo_link__WEBPACK_IMPORTED_MODULE_8__["ApolloLink"](function (operation, forward) {
-    return new apollo_link__WEBPACK_IMPORTED_MODULE_8__["Observable"](function (observer) {
+  var requestLink = new apollo_link__WEBPACK_IMPORTED_MODULE_1__["ApolloLink"](function (operation, forward) {
+    return new apollo_link__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
       var handle;
       Promise.resolve(operation).then(function (oper) {
         return request(oper);
@@ -262,7 +274,7 @@ function createClient(_ref) {
     });
   });
   return new apollo_client__WEBPACK_IMPORTED_MODULE_2__["ApolloClient"]({
-    link: apollo_link__WEBPACK_IMPORTED_MODULE_8__["ApolloLink"].from([Object(apollo_link_error__WEBPACK_IMPORTED_MODULE_6__["onError"])(function (_ref3) {
+    link: apollo_link__WEBPACK_IMPORTED_MODULE_1__["ApolloLink"].from([Object(apollo_link_error__WEBPACK_IMPORTED_MODULE_7__["onError"])(function (_ref3) {
       var graphQLErrors = _ref3.graphQLErrors,
           networkError = _ref3.networkError;
 
@@ -275,7 +287,7 @@ function createClient(_ref) {
       if (networkError) {
         console.log('Logout user');
       }
-    }), requestLink, Object(apollo_link_state__WEBPACK_IMPORTED_MODULE_7__["withClientState"])({
+    }), requestLink, Object(apollo_link_state__WEBPACK_IMPORTED_MODULE_9__["withClientState"])({
       defaults: {
         isConnected: true
       },
@@ -294,15 +306,15 @@ function createClient(_ref) {
         }
       },
       cache: cache
-    }), Object(apollo_link_persisted_queries__WEBPACK_IMPORTED_MODULE_4__["createPersistedQueryLink"])().concat(new apollo_link_batch_http__WEBPACK_IMPORTED_MODULE_5__["BatchHttpLink"]({
-      uri: _config_env__WEBPACK_IMPORTED_MODULE_9__["GRAPHQL_ENDPOINT"],
+    }), Object(apollo_link_persisted_queries__WEBPACK_IMPORTED_MODULE_6__["createPersistedQueryLink"])().concat(new apollo_link_batch_http__WEBPACK_IMPORTED_MODULE_3__["BatchHttpLink"]({
+      uri: _config_env__WEBPACK_IMPORTED_MODULE_4__["GRAPHQL_ENDPOINT"],
       credentials: 'include'
     }))]),
     cache: cache
   });
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (next_with_apollo__WEBPACK_IMPORTED_MODULE_1___default()(createClient));
+/* harmony default export */ __webpack_exports__["default"] = (next_with_apollo__WEBPACK_IMPORTED_MODULE_8___default()(createClient));
 
 /***/ }),
 
