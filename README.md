@@ -40,7 +40,7 @@ To deploy your application, cd to the root of your application and run
 - Apollo server - GraphQL tools
 - Next.js
 
-### Registration workflow
+## Registration workflow
 
 1. User enters their email address on /register
 2. A subscription object is created that has a token
