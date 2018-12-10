@@ -1,22 +1,30 @@
-import React, { PureComponent, Fragment } from 'react'
-import PropTypes from 'prop-types'
+import React, { Fragment, PureComponent } from 'react';
+
+import Button from '@material-ui/core/Button';
 import Link from 'next/link';
+import Paper from '@material-ui/core/Paper';
+import PropTypes from 'prop-types';
+import TextField from '@material-ui/core/TextField';
 import gql from 'graphql-tag';
-import Paper from '@material-ui/core/Paper'
-import TextField from '@material-ui/core/TextField'
-import Button from '@material-ui/core/Button'
 
 class LoginContainer extends PureComponent {
-
-  static propTypes = {}
+  static propTypes = {};
 
   render() {
-    const { error, handleLogin, email, handleChange, password, loading } = this.props;
+    const {
+      error,
+      handleLogin,
+      email,
+      handleChange,
+      password,
+      loading
+    } = this.props;
     return (
       <Fragment>
         <div className="content-middle">
-          <form className="login-form-wrapper"
-            onSubmit={(e) => {
+          <form
+            className="login-form-wrapper"
+            onSubmit={e => {
               e.preventDefault();
               return handleLogin();
             }}
@@ -28,8 +36,8 @@ class LoginContainer extends PureComponent {
                 {loading && <h2>Please wait...</h2>}
 
                 <TextField
-                  name='email'
-                  type='email'
+                  name="email"
+                  type="email"
                   fullWidth
                   value={email}
                   label="Email"
@@ -39,8 +47,8 @@ class LoginContainer extends PureComponent {
                 <br />
                 <TextField
                   label="password"
-                  name='password'
-                  type='password'
+                  name="password"
+                  type="password"
                   fullWidth
                   value={password}
                   onChange={handleChange}
@@ -52,39 +60,36 @@ class LoginContainer extends PureComponent {
                   // disabled={!email || !password}
                   fullWidth
                   onClick={handleLogin}
-                >Login
+                >
+                  Login
                 </Button>
+                <br />
+                <Link href="/register">
+                  <a>Register</a>
+                </Link>
               </div>
-              <Link
-                href='/register'
-              >
-                <a>Register</a>
-              </Link>
-
             </Paper>
           </form>
-
         </div>
         <style jsx>{`
-      .content-middle{
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .login-form-wrapper {
-        width: 100%;
-        max-width: 450px;
-        margin: 0 auto;
-
-      }
-      .login-form__inner{
-        padding: 1rem
-      }
-    `}</style>
+          .content-middle {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .login-form-wrapper {
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+          }
+          .login-form__inner {
+            padding: 1rem;
+          }
+        `}</style>
       </Fragment>
-    )
+    );
   }
 }
 
-export default LoginContainer
+export default LoginContainer;

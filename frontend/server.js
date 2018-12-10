@@ -4,7 +4,7 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
-const port = 7777;
+const port = 3000;
 const proxy = require('express-http-proxy');
 const handle = app.getRequestHandler();
 

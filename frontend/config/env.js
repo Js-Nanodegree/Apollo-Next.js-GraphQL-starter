@@ -4,10 +4,10 @@ const DEVELOPMENT_PATH = 'http://localhost:3000/graphql';
 // The path to your application in production. This should point to your GraphQL API
 const PRODUCTION_PATH = 'https://beta.pleventhub.com/graphql';
 
-export const SERVER_PATH = 'http://localhost:4000/graphql';
+export const SERVER_PATH = 'http://localhost:8080/graphql';
 export const CLIENT_PATH = 'https://example.com/graphql';
 
-const DEVELOPMENT_WS_PATH = 'ws://localhost:4000/graphql';
+const DEVELOPMENT_WS_PATH = 'ws://localhost:8080/graphql';
 
 const PRODUCTION_WS_PATH = 'wss://example.comgraphql';
 
