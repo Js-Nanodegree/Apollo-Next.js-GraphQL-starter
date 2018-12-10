@@ -16,7 +16,7 @@
   "scripts": {
     "dev:server": "npm run --prefix server dev",
     "dev:client": "npm --prefix client start",
-    "deploy": "npm run --prefix server start && npm run --prefix client build",
+    "deploy": "npm run --prefix server start && npm run --prefix frontend build",
     "setup": "npm run --prefix server setup"
   },
   "dependencies": {
