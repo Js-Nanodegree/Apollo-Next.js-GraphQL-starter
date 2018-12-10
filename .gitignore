@@ -3,15 +3,15 @@
 # dependencies
 /node_modules
 /server/node_modules
-/client/node_modules
+/frontend/node_modules
 
 # testing
 /server/coverage
-/client/coverage
+/frontend/coverage
 
 # production
 /server/dist
-/client/build
+/frontend/_next
 
 /server/.env
 
