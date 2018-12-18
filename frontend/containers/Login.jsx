@@ -23,14 +23,14 @@ class LoginContainer extends PureComponent {
       <Fragment>
         <div className="content-middle">
           <form
-            className="login-form-wrapper"
+            className="form-wrapper"
             onSubmit={e => {
               e.preventDefault();
               return handleLogin();
             }}
           >
             <Paper>
-              <div className="login-form__inner">
+              <div className="form__inner">
                 <h1>Login</h1>
                 {error && <h2>{JSON.stringify(error)}</h2>}
                 {loading && <h2>Please wait...</h2>}
@@ -77,14 +77,6 @@ class LoginContainer extends PureComponent {
             display: flex;
             align-items: center;
             justify-content: center;
-          }
-          .login-form-wrapper {
-            width: 100%;
-            max-width: 450px;
-            margin: 0 auto;
-          }
-          .login-form__inner {
-            padding: 1rem;
           }
         `}</style>
       </Fragment>

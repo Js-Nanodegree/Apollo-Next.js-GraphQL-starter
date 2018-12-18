@@ -7,6 +7,9 @@ import contentQueries from './content.queries';
 
 
 export default {
+    Subscription: {
+
+    },
     Mutation: {
         ...authMutations,
         ...contentMutations

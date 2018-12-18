@@ -1,21 +1,20 @@
-import React, { PureComponent } from 'react'
-import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag'
-import App from '../components/App'
-import Loading from '../components/Loading'
-import withData from '../lib/withData'
+import React, { PureComponent } from 'react';
 
+import App from '../components/App';
+import Loading from '../components/Loading';
+import { Mutation } from 'react-apollo';
 import RegisterContainer from '../containers/Register';
 import SubscribeContainer from '../containers/Subscribe';
+import gql from 'graphql-tag';
+import withData from '../lib/withData';
 
 const SUBSCRIBE_MUTATION = gql`
-    mutation Subscribe($input: SubscribeInput) {
-        Subscribe(input: $input) {
-            message
-        }
+  mutation Subscribe($input: SubscribeInput) {
+    Subscribe(input: $input) {
+      message
     }
-`
-
+  }
+`;
 
 class RegisterPage extends PureComponent {
   static getInitialProps({ query }) {
@@ -23,7 +22,7 @@ class RegisterPage extends PureComponent {
   }
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       email: '',
       firstName: '',
@@ -32,64 +31,40 @@ class RegisterPage extends PureComponent {
       passwordRepeat: '',
       subscribeToken: this.props.token,
       _id: this.props._id
-    }
+    };
   }
 
-  handleChange = (event) => {
-    const { name, value } = event.target
-    this.setState({ [name]: value })
-  }
-
-  // handleSubscribe = () => {
-  //   this.setState({ isSubmitting: true, error: '', message: '' })
-  //   this.props.SUBSCRIBE_MUTATION({
-  //     variables: {
-  //       input: {
-  //         email: this.state.email
-  //       }
-  //     }
-  //   }).then((response) => {
-
-  //     return this.setState({ message: response.data.Subscribe.message, isSubmitting: false })
-  //   }).catch((error) => {
-  //     this.setState({ isSubmitting: false })
-  //     console.error(error)
-  //   })
-  // }
-
-  // handleRegister = () => {
-  //   this.setState({ isSubmitting: true, error: '', message: '' })
-  //   this.props.REGISTER_MUTATION({
-  //     variables: {
-  //       input: {
-  //         subscribeToken: this.state.subscribeToken,
-  //         firstName: this.state.firstName,
-  //         lastName: this.state.lastName,
-  //         _id: this.state._id,
-  //         password: this.state.password,
-  //         passwordRepeat: this.state.passwordRepeat
-  //       }
-  //     }
-  //   }).then((response) => {
-
-  //     return this.setState({ message: response.data.Register.message, isSubmitting: false })
-  //   }).catch((error) => {
-  //     return this.setState({ isSubmitting: false, error })
-  //   })
-  // }
+  handleChange = event => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+  };
 
   render() {
-    const { _id, subscribeToken, email, firstName, lastName, password, passwordRepeat } = this.state
+    const {
+      _id,
+      subscribeToken,
+      email,
+      firstName,
+      lastName,
+      password,
+      passwordRepeat
+    } = this.state;
 
     if (_id && subscribeToken) {
       return (
-        <App
-          showNavigation={false}
-          title='Login'
-        >
+        <App showNavigation={false} title="Login">
           <Mutation
             mutation={REGISTER_MUTATION}
-            variables={{ input: { subscribeToken, firstName, lastName, password, passwordRepeat, _id } }}
+            variables={{
+              input: {
+                subscribeToken,
+                firstName,
+                lastName,
+                password,
+                passwordRepeat,
+                _id
+              }
+            }}
           >
             {(register, { loading, error, called }) => {
               return (
@@ -104,54 +79,42 @@ class RegisterPage extends PureComponent {
                   passwordRepeat={passwordRepeat}
                 />
               );
-
             }}
           </Mutation>
-        </App >
+        </App>
       );
-
     }
 
     return (
-      <App
-        showNavigation={false}
-        title='Register'
-      >
-
-
-
+      <App showNavigation={false} title="Register">
         <Mutation
           mutation={SUBSCRIBE_MUTATION}
           variables={{ input: { email } }}
         >
-
           {(subscribe, { loading, error, called }) => {
-            return <SubscribeContainer
-              subscribe={subscribe}
-              handleChange={this.handleChange}
-              email={email}
-              loading={loading}
-              error={error}
-              called={called}
-            />
-
+            return (
+              <SubscribeContainer
+                subscribe={subscribe}
+                handleChange={this.handleChange}
+                email={email}
+                loading={loading}
+                error={error}
+                called={called}
+              />
+            );
           }}
-
         </Mutation>
-
       </App>
-    )
+    );
   }
 }
 
-
-
 const REGISTER_MUTATION = gql`
-    mutation Register($input: RegisterInput) {
-        Register(input: $input) {
-            token
-        }
+  mutation Register($input: RegisterInput) {
+    Register(input: $input) {
+      token
     }
-`
+  }
+`;
 
-export default RegisterPage
+export default RegisterPage;

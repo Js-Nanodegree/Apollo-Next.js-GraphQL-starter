@@ -1,13 +1,16 @@
 /* eslint-disable no-underscore-dangle */
-import { SheetsRegistry } from 'jss';
+
 import {
-  createMuiTheme,
-  createGenerateClassName
+  createGenerateClassName,
+  createMuiTheme
 } from '@material-ui/core/styles';
+
+import { SheetsRegistry } from 'jss';
 
 const theme = createMuiTheme({
   typography: {
-    useNextVariants: true
+    useNextVariants: true,
+    htmlFontSize: 10 // Set the base font size to 10
   }
 });
 

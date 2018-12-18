@@ -33,7 +33,7 @@ class LoginPage extends PureComponent {
       <App showNavigation={false} title="Login">
         <Mutation
           mutation={LOGIN_MUTATION}
-          variabled={{
+          variables={{
             input: {
               email,
               password
