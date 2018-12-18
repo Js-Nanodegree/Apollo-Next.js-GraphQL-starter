@@ -1,10 +1,13 @@
 import App, { Container } from 'next/app';
+
 import { ApolloProvider } from 'react-apollo';
-import { MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import JssProvider from 'react-jss/lib/JssProvider';
-import withData from '../lib/withData';
+import Me from '../components/queries/Me.query';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 import getPageContext from '../lib/getPageContext';
+import react from 'react';
+import withData from '../lib/withData';
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -41,7 +44,18 @@ class MyApp extends App {
               sheetsManager={this.pageContext.sheetsManager}
             >
               <CssBaseline />
-              <Component pageContext={this.pageContext} {...pageProps} />
+
+              <Me>
+                {({ data: { Me } }) => {
+                  return (
+                    <Component
+                      Me={Me}
+                      pageContext={this.pageContext}
+                      {...pageProps}
+                    />
+                  );
+                }}
+              </Me>
             </MuiThemeProvider>
           </JssProvider>
         </ApolloProvider>
