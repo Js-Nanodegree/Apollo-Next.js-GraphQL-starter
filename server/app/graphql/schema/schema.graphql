@@ -8,14 +8,10 @@ type Subscription {
 type Query {
   Me: User
   Users: [User]
-  # An array of domain:uuid inputs
-  GetContent(input: GetContentInput): [Content]
 }
 
 type Mutation {
   Subscribe(input: SubscribeInput): SubscribeResponse # The user inputs their email and they are sent a confirmation email with a link to the registration page
   Register(input: RegisterInput): RegisterResponse # The User fills in the firm and they are given a token on
   Login(input: LoginInput): LoginResponse
-
-  CreateContent(input: CreateContentInput): Content
 }

@@ -1,0 +1,16 @@
+interface Response {
+  message: String!
+}
+
+type SubscribeResponse implements Response {
+  message: String!
+}
+
+type RegisterResponse implements Response {
+  message: String!
+  token: String!
+}
+type LoginResponse implements Response {
+  message: String!
+  token: String!
+}

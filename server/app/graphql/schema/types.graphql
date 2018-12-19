@@ -1,49 +1,16 @@
-type User {
-    _id: ID!
-    email: String!
-    firstName: String!
-    lastName: String!
-    createdAt: Date!
-    updatedAt: Date!
+interface Node {
+  _id: ID!
+  createdAt: Date!
+  updatedAt: Date!
 }
-
-type Token {
-    token: String
+type User implements Node {
+  _id: ID!
+  email: String!
+  firstName: String!
+  lastName: String!
+  createdAt: Date!
+  updatedAt: Date!
 }
-
-type SubscribeResponse {
-    message: String
-}
-
-
-type Response {
-    message: String
-    valid: Boolean
-    token: String
-}
-
-type RegisterResponse {
-    token: String!
-}
-
-type LoginResponse {
-    token: String!
-}
-
-type Content {
-    _id: ID!
-    domain: String!
-    url: String!
-    ucid: String!
-    statusCheck: [StatusCheck]
-}
-
-type StatusCheck{
-    _id: ID!
-    status: Number!
-    check: Date!
-}
-
 
 scalar Date
 scalar Number

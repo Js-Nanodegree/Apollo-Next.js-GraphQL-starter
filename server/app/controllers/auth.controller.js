@@ -1,6 +1,10 @@
 import { DEV_URL, PROD_URL } from '../config/settings';
 import { IS_DEBUG, SESSION_DURATION } from '../config/env';
-import { InvalidEmailPasswordError, NoUserError } from './errors/auth.errors';
+import {
+  InvalidEmailPasswordError,
+  MissingRequiredFieldsError,
+  NoUserError
+} from './errors/auth.errors';
 
 import { SIGNING_KEY } from '../config/secrets';
 import Subscribe from '../models/subscribe.model';
@@ -49,6 +53,18 @@ async function register(
   if (password !== passwordRepeat) {
     return Error('Passwords do not match');
   }
+  if (!firstName || !lastName || !password || !passwordRepeat) {
+    throw new MissingRequiredFieldsError({
+      data: {
+        missing: {
+          firstName: !firstName,
+          lastName: !lastName,
+          password: !password,
+          passwordRepeat: !passwordRepeat
+        }
+      }
+    });
+  }
 
   const subscription = await Subscribe.findById(_id)
     .then(data => {
@@ -88,7 +104,7 @@ async function register(
       // Set the token in a cookie
       context.res.cookie('token', token, { maxAge: 3.154e10, httpOnly: true });
 
-      return { token };
+      return { token, message: 'Successfully registered' };
     })
     .catch(error => {
       return error;
