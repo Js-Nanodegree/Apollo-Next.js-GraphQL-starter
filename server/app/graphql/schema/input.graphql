@@ -1,25 +1,22 @@
 input RegisterInput {
-    subscribeToken: String!
-    firstName: String!
-    _id: String!
-    lastName: String!
-    password: String!
-    passwordRepeat: String!
+  subscribeToken: String!
+  firstName: String!
+  _id: String!
+  lastName: String!
+  password: String!
+  passwordRepeat: String!
 }
 
 input SubscribeInput {
-    email: String!
+  email: String!
 }
 
 input LoginInput {
-    email: String!
-    password: String!
+  email: String!
+  password: String!
 }
 
-input CreateContentInput{
-    url: String
-}
-
-input GetContentInput {
-    UCIDs: [String]
+input InviteInput {
+  email: String!
+  message: String
 }

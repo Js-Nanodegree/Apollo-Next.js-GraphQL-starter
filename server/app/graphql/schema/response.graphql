@@ -1,16 +1,21 @@
-interface Response {
+type SubscribeResponse {
   message: String!
 }
 
-type SubscribeResponse implements Response {
+type RegisterResponse {
+  message: String!
+  token: String!
+}
+type LoginResponse {
+  message: String!
+  token: String!
+}
+type InviteResponse {
   message: String!
 }
 
-type RegisterResponse implements Response {
+type UsersQueryResponse {
   message: String!
-  token: String!
-}
-type LoginResponse implements Response {
-  message: String!
-  token: String!
+  count: Number!
+  nodes: [User]
 }
