@@ -1,16 +1,18 @@
 import { DEV_URL, PROD_URL } from '../config/settings';
-import { IS_DEBUG, SESSION_DURATION } from '../config/env';
 import {
+  EmailAdreadyRegisteredError,
   InvalidEmailPasswordError,
   MissingRequiredFieldsError,
   NoUserError
 } from './errors/auth.errors';
+import { IS_DEBUG, SESSION_DURATION } from '../config/env';
 
 import { SIGNING_KEY } from '../config/secrets';
 import Subscribe from '../models/subscribe.model';
 import User from '../models/user.model';
 import axios from 'axios';
 import crypto from 'crypto';
+import moment from 'moment';
 import nJwt from 'njwt';
 import { subscribeMailer } from '../mailers';
 
@@ -161,20 +163,50 @@ async function subscribe(_, { email }) {
       throw error;
     });
 
-  if (subscriber) {
-    return new Error(
-      'You have already subscribed. Please activate your account.'
-    );
+  const token = crypto.randomBytes(18).toString('hex');
+  if (subscriber && !subscriber.active) {
+    throw new EmailAdreadyRegisteredError({
+      data: {
+        email
+      }
+    });
   }
 
-  const token = crypto.randomBytes(18).toString('hex');
+  const timeSinceLastEmail = subscriber
+    ? moment().diff(moment(subscriber.updatedAt), 'milliseconds')
+    : 9e6;
+
+  // Only let the use send a new email every 15 minutes
+  const delayBeforeNewRequest = 15 * 60000;
+
+  if (timeSinceLastEmail <= delayBeforeNewRequest) {
+    const timeLeftBeforeNewRequest = delayBeforeNewRequest - timeSinceLastEmail;
+    return {
+      message: `Confirmation emails can only be sent every ${delayBeforeNewRequest /
+        60000} minutes.`
+    };
+  }
+
+  if (subscriber) {
+    return Subscribe.findOneAndUpdate({ _id: subscriber._id }, { token })
+      .then(() => {
+        subscribeMailer({ email, id: subscriber._id, token });
+
+        return {
+          message: `A new confirmation email has been sent to ${email}`
+        };
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
 
   return Subscribe.create({ email, token })
     .then(data => {
       // Send a verification email to the user
       subscribeMailer({ email, id: data._id, token });
 
-      return { message: 'Successfully subscribed' };
+      return { message: `A confirmation email as been sent to ${email}` };
     })
     .catch(error => {
       return error;

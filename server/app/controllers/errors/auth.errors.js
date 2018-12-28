@@ -12,4 +12,13 @@ const InvalidEmailPasswordError = createError('InvalidEmailPasswordError', {
   message: 'That username or password is invalid.'
 });
 
-export { NoUserError, InvalidEmailPasswordError, MissingRequiredFieldsError };
+const EmailAdreadyRegisteredError = createError('EmailAdreadyRegisteredError', {
+  message: 'That email is already registered.'
+});
+
+export {
+  NoUserError,
+  InvalidEmailPasswordError,
+  MissingRequiredFieldsError,
+  EmailAdreadyRegisteredError
+};
