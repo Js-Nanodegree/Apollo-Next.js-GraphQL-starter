@@ -1,10 +1,10 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment } from "react";
 
-import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
-import Link from 'next/link';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import AppBar from "@material-ui/core/AppBar";
+import Button from "@material-ui/core/Button";
+import Link from "next/link";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 
 class Navigation extends Component {
   constructor(props) {
@@ -26,11 +26,11 @@ class Navigation extends Component {
       <Fragment>
         <AppBar
           position="static"
-          classes={{ root: 'nav-container' }}
-          style={{ backgroundColor: '#fff' }}
+          classes={{ root: "nav-container" }}
+          style={{ backgroundColor: "#fff" }}
         >
           <Toolbar>
-            <Typography variant="title" color="inherit" style={{ flexGrow: 1 }}>
+            <Typography color="inherit" style={{ flexGrow: 1 }}>
               {title}
             </Typography>
 
