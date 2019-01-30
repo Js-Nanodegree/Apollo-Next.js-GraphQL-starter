@@ -8,7 +8,7 @@
 - [x] Hot Reloading thanks to Next.js
 - [x] CSS in JSX
 - [x] User registration and email verification
-- [ ] TypeScript support
+- [x] TypeScript support
 - [ ] Nginx deployment configuration
 
 ## Development:
