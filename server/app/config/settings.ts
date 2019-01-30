@@ -2,18 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-function normalizePort(val) {
-    const port = parseInt(val, 10);
-    if (isNaN(port)) {
-        return val;
-    }
-    if (port >= 0) {
-        return port;
-    }
-    return false;
-}
-
-export const port = normalizePort(process.env.PORT || '8080');
+export const port = process.env.PORT || 8080;
 
 const DB_NAME = 'my-db';
 

@@ -1,22 +1,26 @@
-import { DEV_URL, PROD_URL } from '../config/settings';
+import { DEV_URL, PROD_URL } from "../config/settings";
 import {
   EmailAdreadyRegisteredError,
   InvalidEmailPasswordError,
   MissingRequiredFieldsError,
   NoUserError
-} from './errors/auth.errors';
-import { IS_DEBUG, SESSION_DURATION } from '../config/env';
+} from "./errors/auth.errors";
+import { IS_DEBUG, SESSION_DURATION } from "../config/env";
 
-import { SIGNING_KEY } from '../config/secrets';
-import Subscribe from '../models/subscribe.model';
-import User from '../models/user.model';
-import axios from 'axios';
-import crypto from 'crypto';
-import moment from 'moment';
-import nJwt from 'njwt';
-import { subscribeMailer } from '../mailers';
+import { SIGNING_KEY } from "../config/secrets";
+import Subscribe from "../models/subscribe.model";
+import User from "../models/user.model";
+import crypto from "crypto";
+import moment from "moment";
+import nJwt from "njwt";
+import { subscribeMailer } from "../mailers";
+import { IContext } from "../types/generic";
 
-function generateToken(_, { _id }) {
+type TgenerateTokenInput = {
+  _id: string;
+};
+
+function generateToken(_: null, { _id }: TgenerateTokenInput) {
   const claims = {
     iss: IS_DEBUG ? DEV_URL : PROD_URL, // The URL of your service - update paths in ../config/settings
     sub: _id // The UID of the user in your system - MongoDB _id
@@ -30,7 +34,14 @@ function generateToken(_, { _id }) {
   return jwt.compact();
 }
 
-function deactivateSubscribeToken(_, { email }) {
+type TdeactivateSubscribeTokenInput = {
+  email: string;
+};
+
+function deactivateSubscribeToken(
+  _: null,
+  { email }: TdeactivateSubscribeTokenInput
+) {
   return Subscribe.findOneAndUpdate(
     { email },
     {
@@ -46,14 +57,29 @@ function deactivateSubscribeToken(_, { email }) {
       return error;
     });
 }
+type TregisterInput = {
+  subscribeToken: string;
+  firstName: string;
+  lastName: string;
+  _id: string;
+  password: string;
+  passwordRepeat: string;
+};
 
 async function register(
-  _,
-  { subscribeToken, firstName, lastName, _id, password, passwordRepeat },
-  context
+  _: null,
+  {
+    subscribeToken,
+    firstName,
+    lastName,
+    _id,
+    password,
+    passwordRepeat
+  }: TregisterInput,
+  context: IContext
 ) {
   if (password !== passwordRepeat) {
-    return Error('Passwords do not match');
+    return Error("Passwords do not match");
   }
   if (!firstName || !lastName || !password || !passwordRepeat) {
     throw new MissingRequiredFieldsError({
@@ -81,12 +107,12 @@ async function register(
   }
 
   if (!subscription.active) {
-    return Error('You have already registered. Please login.');
+    return Error("You have already registered. Please login.");
   }
 
   // Check the subscribeToken to make sure it is valid
   if (subscription.token !== subscribeToken) {
-    return Error('Invalid token.');
+    return Error("Invalid token.");
   }
 
   // Make sure you already use create here so the password is hashed with Mongoose's pre save middleware
@@ -104,16 +130,24 @@ async function register(
       deactivateSubscribeToken(_, { email: user.email });
 
       // Set the token in a cookie
-      context.res.cookie('token', token, { maxAge: 3.154e10, httpOnly: true });
+      context.res.cookie("token", token, { maxAge: 3.154e10, httpOnly: true });
 
-      return { token, message: 'Successfully registered' };
+      return { token, message: "Successfully registered" };
     })
     .catch(error => {
       return error;
     });
 }
 
-async function login(_, { email, password }, context) {
+type TLoginInput = {
+  email: string;
+  password: string;
+};
+async function login(
+  _: null,
+  { email, password }: TLoginInput,
+  context: IContext
+) {
   const user = await User.findOne({ email })
     .then(data => {
       return data;
@@ -131,14 +165,7 @@ async function login(_, { email, password }, context) {
     });
   }
 
-  const isMatch = await user
-    .comparePassword(password)
-    .then(data => {
-      return data;
-    })
-    .catch(error => {
-      throw error;
-    });
+  const isMatch = await user.comparePassword(password);
 
   if (!isMatch) {
     throw new InvalidEmailPasswordError();
@@ -146,7 +173,7 @@ async function login(_, { email, password }, context) {
 
   const token = await generateToken(_, { _id: user._id });
 
-  context.res.cookie('token', token, {
+  context.res.cookie("token", token, {
     maxAge: SESSION_DURATION,
     httpOnly: true
   });
@@ -154,7 +181,11 @@ async function login(_, { email, password }, context) {
   return { token };
 }
 
-async function subscribe(_, { email }) {
+export interface ISubscribeInput {
+  email: string;
+}
+
+async function subscribe(_: null, { email }: ISubscribeInput) {
   const subscriber = await Subscribe.findOne({ email })
     .then(data => {
       return data;
@@ -163,7 +194,7 @@ async function subscribe(_, { email }) {
       throw error;
     });
 
-  const token = crypto.randomBytes(18).toString('hex');
+  const token = crypto.randomBytes(18).toString("hex");
   if (subscriber && !subscriber.active) {
     throw new EmailAdreadyRegisteredError({
       data: {
@@ -173,7 +204,7 @@ async function subscribe(_, { email }) {
   }
 
   const timeSinceLastEmail = subscriber
-    ? moment().diff(moment(subscriber.updatedAt), 'milliseconds')
+    ? moment().diff(moment(subscriber.updatedAt), "milliseconds")
     : 9e6;
 
   // Only let the use send a new email every 15 minutes
@@ -213,65 +244,8 @@ async function subscribe(_, { email }) {
     });
 }
 
-export async function getGithubToken(githubCode) {
-  const endpoint = 'https://github.com/login/oauth/access_token';
-
-  const data = await axios
-    .post(endpoint, {
-      client_id: 'Iv1.d276ac6dd35b269e',
-      client_secret: 'e32d9f6fff0aff198a2f2721ae1013e6a77528b1',
-      code: githubCode
-    })
-    .then(response => {
-      return response.data;
-    });
-
-  if (data.error) {
-    throw new Error(data.error);
-  }
-
-  return data.access_token;
-}
-
-export async function getGithubUser(githubToken) {
-  const endpoint = `https://api.github.com/user?access_token=${githubToken}`;
-  return await axios
-    .get(endpoint)
-    .then(response => {
-      return response.data;
-    })
-    .catch(error => {
-      throw error;
-    });
-}
-
-async function gitHubAuth(_, { GitHubCode }, context) {
-  console.log({ GitHubCode });
-  const githubToken = await getGithubToken(GitHubCode);
-  console.log('githubToken', githubToken);
-  if (!githubToken) {
-    throw new Error('Could not get a the token from GitHub.');
-  }
-
-  const githubUser = await getGithubUser(githubToken);
-
-  console.log({ githubToken });
-
-  console.log({ githubUser });
-
-  return {
-    // token: jwt.sign({userId: user.id}, SIGNING_KEY),
-    //   user
-    token: 'token!',
-    user: {
-      _id: '123'
-    }
-  };
-}
-
 export default {
   register,
   subscribe,
-  login,
-  gitHubAuth
+  login
 };

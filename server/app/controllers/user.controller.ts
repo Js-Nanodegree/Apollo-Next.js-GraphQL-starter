@@ -1,12 +1,15 @@
-import Subscribe from '../models/subscribe.model';
-import User from '../models/user.model';
-import attachResolverType from '../utils/attachResolverType';
+import User from "../models/user.model";
+import { IContext } from "../types/generic";
 
-function Me(_, {}, context) {
+function Me(_: null, {}, context: IContext) {
   return context.req.user;
 }
 
-function invite(_, { email, message }, context) {
+type TinviteInput = {
+  email: string;
+  message: string;
+};
+function invite(_: null, { email, message }: TinviteInput) {
   console.log({ email });
   console.log({ message });
 
@@ -17,16 +20,16 @@ function invite(_, { email, message }, context) {
   // Send an email with the registration link
 }
 
-async function Users(_, {}, context) {
+async function Users(_: null, {}) {
   const users = await User.find()
-    .select('-password')
+    .select("-password")
     .lean()
     .exec();
 
   return {
     count: users.length,
     nodes: users,
-    message: 'Successfully queried users'
+    message: "Successfully queried users"
   };
 }
 

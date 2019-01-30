@@ -1,15 +1,23 @@
-import mongoose, {Schema} from 'mongoose';
+import mongoose, { HookNextFunction, Document} from 'mongoose';
 import timestamp from 'mongoose-timestamp';
 import validator from 'validator';
 
-const SubscribeSchema = new Schema({
+
+export interface ISubscribe extends Document {
+email: string,
+active: boolean,
+token: string;
+updatedAt: string
+}
+
+const SubscribeSchema = new mongoose.Schema({
     email: {type: String, unique: true, lowercase: true, required: true},
     active: {type: Boolean, default: true},
     token: {type: String, required: true}
 });
 
 
-function validateEmail(next) {
+function validateEmail(next: HookNextFunction) {
     try {
         const user = this;
         if (validator.isEmail(user.email)) {
@@ -25,4 +33,4 @@ SubscribeSchema.pre('save', validateEmail);
 
 SubscribeSchema.plugin(timestamp);
 
-export default mongoose.model('Subscribe', SubscribeSchema);
+export default mongoose.model<ISubscribe>('Subscribe', SubscribeSchema);

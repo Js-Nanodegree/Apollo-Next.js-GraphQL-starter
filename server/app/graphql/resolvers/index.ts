@@ -4,9 +4,13 @@ import authQueries from './auth.queries';
 import userMutations from './user.mutations';
 import userQueries from './user.queries';
 
+type TObject = {
+  resolveType: string;
+}
+
 export default {
   Node: {
-    __resolveType(obj) {
+    __resolveType(obj: TObject) {
       if (obj.resolveType) {
         return obj.resolveType;
       }

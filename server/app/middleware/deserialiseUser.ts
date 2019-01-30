@@ -1,8 +1,10 @@
+import {Request, Response, NextFunction} from 'express';
 import nJwt from 'njwt'
 import { SIGNING_KEY } from '../config/secrets'
-import User from '../models/user.model'
+import User, {IUser} from '../models/user.model'
+import {IReq} from '../types/generic';
 
-export default async (req, res, next) => {
+export default async (req: IReq, res: Response, next: NextFunction) => {
   const token = req.cookies.token
   if (!token) {
     return next()
@@ -12,15 +14,13 @@ export default async (req, res, next) => {
     const verifiedJwt = nJwt.verify(token, SIGNING_KEY)
 // Attach the user to the request object
     req.user = await User.findById(verifiedJwt.body.sub)
-      .then((data) => {
-        return data
-      }).catch(() => {
-        return next()
-      })
+      .then((data: IUser) => {
+        return data;
+      });
 
-    return next()
+    return next();
   } catch (error) {
-    return next()
+    return next();
   }
 }
 

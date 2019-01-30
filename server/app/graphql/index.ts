@@ -1,29 +1,39 @@
+import {Request, Response} from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { PubSub } from 'apollo-server-express';
 import { formatError } from 'apollo-errors';
 import resolvers from './resolvers';
 import typeDefs from './schema';
 
-const options = {
-  formatError
-};
+type TContext = {
+  req: Request;
+  res: Response
+}
+
+type TInfo = {
+  queryString: string;
+}
+
+// const options = {
+//   formatError
+// };
 
 export const pubsub = new PubSub();
 
 export default new ApolloServer({
   typeDefs,
   resolvers,
-  options,
-  formatError: error => {
+ // options,
+  formatError: (error: Error) => {
     console.log(error);
     return error;
   },
-  formatResponse: (response, info) => {
+  formatResponse: (response: any, info: TInfo) => {
     console.log('--------------------------------------');
     console.log(info.queryString);
     return response;
   },
-  context: ({ req, res }) => {
+  context: ({ req, res }: TContext) => {
     return { req, res };
   }
 });

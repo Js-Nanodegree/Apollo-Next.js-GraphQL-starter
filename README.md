@@ -7,7 +7,8 @@
 - [x] Ready for deployment
 - [x] Hot Reloading thanks to Next.js
 - [x] CSS in JSX
-- [x] user registration and email verification
+- [x] User registration and email verification
+- [ ] TypeScript support
 - [ ] Nginx deployment configuration
 
 ## Development:

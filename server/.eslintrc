@@ -20,7 +20,8 @@
     "no-unused-labels": 2,
     "no-console": 2,
     "no-undef": 2,
-    "node/no-missing-import": "error"
+    "node/no-missing-import": "error",
+    "quotes": ["error", "single"]
   },
   "globals": {
     "__DEVSERVER__": true,

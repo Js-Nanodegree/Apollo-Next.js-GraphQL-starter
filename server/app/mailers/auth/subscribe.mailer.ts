@@ -6,7 +6,7 @@ import {SYSTEM_EMAIL_ADDRESS, DEBUG_EMAIL_ADDRESS, DEV_URL, PROD_URL} from '../.
 
 const mailgun = require('mailgun-js')(MAILGUN_CONFIG);
 
-export default async ({email, id, token}) => {
+export default async ({email, id, token}: any) => {
     const template = path.join(__dirname, '../templates/subscribe.template.ejs');
 
     const URL = IS_DEBUG ? DEV_URL : PROD_URL;
@@ -15,14 +15,14 @@ export default async ({email, id, token}) => {
         id,
         token,
         URL
-    }, {}, function (err, resultPromise) {
+    }, {}, function (err: Error, resultPromise: any) {
         if (err) {
             return err;
         }
         return resultPromise
-            .then(function (result) {
+            .then(function (result: string) {
                 return result;
-            }).catch((error) => {
+            }).catch((error: Error) => {
                 throw error;
             });
     });
@@ -39,7 +39,7 @@ export default async ({email, id, token}) => {
         html
     };
 
-    return mailgun.messages().send(message, (error) => {
+    return mailgun.messages().send(message, (error: Error) => {
         if (error) {
             throw error;
         }

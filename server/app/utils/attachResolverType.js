@@ -1,5 +1,3 @@
-// @flow
-
 export default ({ array, type }) => {
   return array.map(item => {
     return {
