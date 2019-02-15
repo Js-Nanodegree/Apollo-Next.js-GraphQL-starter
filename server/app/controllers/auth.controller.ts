@@ -139,13 +139,11 @@ async function register(
     });
 }
 
-type TLoginInput = {
-  email: string;
-  password: string;
-};
 async function login(
-  _: null,
-  { email, password }: TLoginInput,
+  { email, password }: {
+    email: string;
+    password: string;
+  },
   context: IContext
 ) {
   const user = await User.findOne({ email })

@@ -10,6 +10,6 @@ export default {
     return Controller.register(_, { ...input }, context);
   },
   Login: (_: null, { input }: any, context: Context) => {
-    return Controller.login(_, { ...input }, context);
+    return Controller.login({ ...input }, context);
   }
 };
