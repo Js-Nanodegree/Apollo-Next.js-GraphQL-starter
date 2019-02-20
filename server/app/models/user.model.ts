@@ -36,7 +36,7 @@ const UserSchema = new mongoose.Schema({
   resetPasswordExpires: Date
 });
 
-function encryptPassword(next: HookNextFunction) {
+function encryptPassword(this: IUser, next: HookNextFunction) {
   try {
     const user = this;
     if (!user.isModified("password")) {
@@ -44,7 +44,7 @@ function encryptPassword(next: HookNextFunction) {
     }
     return bcrypt.genSalt(5, (saltErr, salt) => {
       if (saltErr) return next(saltErr);
-      return bcrypt.hash(user.password, salt, null, (hashErr, hash) => {
+      return bcrypt.hash(user.password, salt, (() => {return}), (hashErr: Error, hash: string) => {
         if (hashErr) return next(hashErr);
         user.password = hash;
         return next();
@@ -55,7 +55,7 @@ function encryptPassword(next: HookNextFunction) {
   }
 }
 
-function validateEmail(next: HookNextFunction) {
+function validateEmail(this: IUser, next: HookNextFunction) {
   try {
     const user = this;
     if (validator.isEmail(user.email)) {

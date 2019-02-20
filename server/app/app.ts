@@ -2,7 +2,6 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import express from "express";
 import loggaroo from "loggaroo";
-import winston from "winston";
 import logger from "morgan";
 import ApolloServer from "./graphql";
 import { ENV } from "./config/env";

@@ -14,7 +14,7 @@ export default async (req: IReq, res: Response, next: NextFunction) => {
     const verifiedJwt = nJwt.verify(token, SIGNING_KEY)
 // Attach the user to the request object
     req.user = await User.findById(verifiedJwt.body.sub)
-      .then((data: IUser) => {
+      .then((data: IUser | null) => {
         return data;
       });
 

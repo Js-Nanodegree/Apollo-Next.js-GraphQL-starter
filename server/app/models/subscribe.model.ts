@@ -17,7 +17,7 @@ const SubscribeSchema = new mongoose.Schema({
 });
 
 
-function validateEmail(next: HookNextFunction) {
+function validateEmail(this: ISubscribe, next: HookNextFunction) {
     try {
         const user = this;
         if (validator.isEmail(user.email)) {
