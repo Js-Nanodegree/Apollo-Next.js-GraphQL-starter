@@ -1,7 +1,5 @@
 import React, { Fragment, PureComponent } from 'react';
-
 import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 
@@ -73,7 +71,10 @@ class RegisterContainer extends PureComponent {
                 type="password"
                 autoComplete="repeat-password"
               />
+              <br />
+              <br />
               <Button
+                fullWidth
                 disabled={
                   !firstName ||
                   !lastName ||

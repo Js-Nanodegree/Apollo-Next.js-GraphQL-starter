@@ -1,12 +1,34 @@
 import React, { PureComponent } from 'react';
 
 import App from '../components/App';
-import Loading from '../components/Loading';
 import { Mutation } from 'react-apollo';
 import RegisterContainer from '../containers/Register';
 import SubscribeContainer from '../containers/Subscribe';
 import gql from 'graphql-tag';
-import withData from '../lib/withData';
+import Paper from '@material-ui/core/Paper';
+import styled from 'styled-components';
+
+const Outer = styled.div`
+  width: 100%;
+  height: 100%;
+  padding: 1.5rem;
+  display: flex;
+  align-content: center;
+  align-items: center;
+`;
+
+const Inner = styled(Paper)`
+  width: 100%;
+  max-width: 50rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+`;
+
+const Wrapper = ({ children }) => (
+  <Outer>
+    <Inner>{children}</Inner>
+  </Outer>
+);
 
 const SUBSCRIBE_MUTATION = gql`
   mutation Subscribe($input: SubscribeInput) {
@@ -52,7 +74,7 @@ class RegisterPage extends PureComponent {
 
     if (_id && subscribeToken) {
       return (
-        <App showNavigation={false} title="Login">
+        <App showNavigation={false} title="Register">
           <Mutation
             mutation={REGISTER_MUTATION}
             variables={{
@@ -68,16 +90,18 @@ class RegisterPage extends PureComponent {
           >
             {(register, { loading, error, called }) => {
               return (
-                <RegisterContainer
-                  register={register}
-                  handleChange={this.handleChange}
-                  email={email}
-                  error={error}
-                  firstName={firstName}
-                  lastName={lastName}
-                  password={password}
-                  passwordRepeat={passwordRepeat}
-                />
+                <Wrapper>
+                  <RegisterContainer
+                    register={register}
+                    handleChange={this.handleChange}
+                    email={email}
+                    error={error}
+                    firstName={firstName}
+                    lastName={lastName}
+                    password={password}
+                    passwordRepeat={passwordRepeat}
+                  />
+                </Wrapper>
               );
             }}
           </Mutation>
@@ -93,14 +117,18 @@ class RegisterPage extends PureComponent {
         >
           {(subscribe, { loading, error, called }) => {
             return (
-              <SubscribeContainer
-                subscribe={subscribe}
-                handleChange={this.handleChange}
-                email={email}
-                loading={loading}
-                error={error}
-                called={called}
-              />
+              <Wrapper>
+                <div className="fullHeight fullWidth  align-items__center align-content__center display__flex">
+                  <SubscribeContainer
+                    subscribe={subscribe}
+                    handleChange={this.handleChange}
+                    email={email}
+                    loading={loading}
+                    error={error}
+                    called={called}
+                  />
+                </div>
+              </Wrapper>
             );
           }}
         </Mutation>

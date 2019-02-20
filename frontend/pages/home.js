@@ -21,7 +21,6 @@ class HomePage extends Component {
     return (
       <App showNavigation title="Home">
         <div>
-          {JSON.stringify(Me)}
           <h1>Home</h1>
         </div>
       </App>
