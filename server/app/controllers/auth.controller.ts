@@ -20,7 +20,7 @@ type TgenerateTokenInput = {
   _id: string;
 };
 
-function generateToken(_: null, { _id }: TgenerateTokenInput) {
+function generateToken({ _id }: TgenerateTokenInput) {
   const claims = {
     iss: IS_DEBUG ? DEV_URL : PROD_URL, // The URL of your service - update paths in ../config/settings
     sub: _id // The UID of the user in your system - MongoDB _id
@@ -39,7 +39,6 @@ type TdeactivateSubscribeTokenInput = {
 };
 
 function deactivateSubscribeToken(
-  _: null,
   { email }: TdeactivateSubscribeTokenInput
 ) {
   return Subscribe.findOneAndUpdate(
@@ -67,7 +66,6 @@ type TregisterInput = {
 };
 
 async function register(
-  _: null,
   {
     subscribeToken,
     firstName,
@@ -124,10 +122,10 @@ async function register(
   })
     .then(async user => {
       const _id = user._id;
-      const token = await generateToken(null, { _id });
+      const token = await generateToken({ _id });
 
       // Change the active param to false on the subscribe token
-      deactivateSubscribeToken(_, { email: user.email });
+      deactivateSubscribeToken({ email: user.email });
 
       // Set the token in a cookie
       context.res.cookie("token", token, { maxAge: 3.154e10, httpOnly: true });
@@ -169,7 +167,7 @@ async function login(
     throw new InvalidEmailPasswordError();
   }
 
-  const token = await generateToken(_, { _id: user._id });
+  const token = await generateToken({ _id: user._id });
 
   context.res.cookie("token", token, {
     maxAge: SESSION_DURATION,
@@ -183,7 +181,7 @@ export interface ISubscribeInput {
   email: string;
 }
 
-async function subscribe(_: null, { email }: ISubscribeInput) {
+async function subscribe({ email }: ISubscribeInput) {
   const subscriber = await Subscribe.findOne({ email })
     .then(data => {
       return data;

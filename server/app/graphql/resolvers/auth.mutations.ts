@@ -4,10 +4,10 @@ import { Context } from "apollo-server-core";
 
 export default {
   Subscribe: (_: null, { input }: any) => {
-    return Controller.subscribe(_, { ...input });
+    return Controller.subscribe({ ...input });
   },
   Register: (_: null, { input }: any, context: IContext) => {
-    return Controller.register(_, { ...input }, context);
+    return Controller.register({ ...input }, context);
   },
   Login: (_: null, { input }: any, context: Context) => {
     return Controller.login({ ...input }, context);
