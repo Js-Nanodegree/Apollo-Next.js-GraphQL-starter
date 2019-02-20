@@ -111,6 +111,9 @@ class MyApp extends App {
           .form__inner {
             padding: 1rem;
           }
+          .text-align__center {
+            text-align: center;
+          }
         `}</style>
       </Container>
     );

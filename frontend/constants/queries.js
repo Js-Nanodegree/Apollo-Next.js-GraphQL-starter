@@ -5,6 +5,8 @@ export const CURRENT_USER_QUERY = gql`
     Me {
       _id
       email
+      firstName
+      lastName
     }
   }
 `;

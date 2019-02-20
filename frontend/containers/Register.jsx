@@ -15,12 +15,31 @@ class RegisterContainer extends PureComponent {
       lastName,
       password,
       passwordRepeat,
-      error
+      error,
+      called
     } = this.props;
+
+    if (called && !error) {
+      return (
+        <>
+          <h1>Thank you</h1>
+          <p>Your account is now active.</p>
+          <br />
+          <p className="text-align__center">
+            <a href="/">HOME</a>
+          </p>
+        </>
+      );
+    }
+
+    if (error && error.graphQLErrors) {
+      return error.graphQLErrors.map(err => (
+        <p className="error-message">{err.message}</p>
+      ));
+    }
 
     return (
       <Fragment>
-        {error && JSON.stringify(error)}
         <div className="content-middle">
           <form
             className="form-wrapper"
@@ -85,7 +104,7 @@ class RegisterContainer extends PureComponent {
                 }
                 type="submit"
               >
-                SUBMIT
+                {loading ? 'REGISTERING' : 'REGISTER'}
               </Button>
             </div>
           </form>

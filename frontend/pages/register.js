@@ -15,6 +15,7 @@ const Outer = styled.div`
   display: flex;
   align-content: center;
   align-items: center;
+  flex-direction: column;
 `;
 
 const Inner = styled(Paper)`
@@ -92,6 +93,8 @@ class RegisterPage extends PureComponent {
               return (
                 <Wrapper>
                   <RegisterContainer
+                    loading={loading}
+                    called={called}
                     register={register}
                     handleChange={this.handleChange}
                     email={email}
@@ -118,16 +121,14 @@ class RegisterPage extends PureComponent {
           {(subscribe, { loading, error, called }) => {
             return (
               <Wrapper>
-                <div className="fullHeight fullWidth  align-items__center align-content__center display__flex">
-                  <SubscribeContainer
-                    subscribe={subscribe}
-                    handleChange={this.handleChange}
-                    email={email}
-                    loading={loading}
-                    error={error}
-                    called={called}
-                  />
-                </div>
+                <SubscribeContainer
+                  subscribe={subscribe}
+                  handleChange={this.handleChange}
+                  email={email}
+                  loading={loading}
+                  error={error}
+                  called={called}
+                />
               </Wrapper>
             );
           }}
