@@ -6,23 +6,16 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 
-class SubscribeContainer extends PureComponent {
+class InviteContainer extends PureComponent {
   static propTypes = {
     handleChange: func.isRequired,
-    subscribe: func.isRequired,
+    invite: func.isRequired,
     email: string.isRequired,
     loading: bool
   };
 
   render() {
-    const {
-      handleChange,
-      subscribe,
-      email,
-      loading,
-      error,
-      called
-    } = this.props;
+    const { handleChange, invite, email, loading, error, called } = this.props;
 
     if (called && !error && !loading) {
       return (
@@ -43,7 +36,7 @@ class SubscribeContainer extends PureComponent {
           className="form-wrapper"
           onSubmit={e => {
             e.preventDefault();
-            return subscribe();
+            return invite();
           }}
         >
           <div className="form__inner">
@@ -69,4 +62,4 @@ class SubscribeContainer extends PureComponent {
   }
 }
 
-export default SubscribeContainer;
+export default InviteContainer;

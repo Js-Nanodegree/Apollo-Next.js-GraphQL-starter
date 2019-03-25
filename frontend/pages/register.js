@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import App from '../components/App';
 import { Mutation } from 'react-apollo';
 import RegisterContainer from '../containers/Register';
-import SubscribeContainer from '../containers/Subscribe';
+import InviteContainer from '../containers/Invite';
 import gql from 'graphql-tag';
 import Paper from '@material-ui/core/Paper';
 import styled from 'styled-components';
@@ -31,10 +31,18 @@ const Wrapper = ({ children }) => (
   </Outer>
 );
 
-const SUBSCRIBE_MUTATION = gql`
-  mutation Subscribe($input: SubscribeInput) {
-    Subscribe(input: $input) {
+const INVITE_MUTATION = gql`
+  mutation Invite($input: InviteInput) {
+    Invite(input: $input) {
       message
+    }
+  }
+`;
+
+const REGISTER_MUTATION = gql`
+  mutation Register($input: RegisterInput) {
+    Register(input: $input) {
+      token
     }
   }
 `;
@@ -52,7 +60,7 @@ class RegisterPage extends PureComponent {
       lastName: '',
       password: '',
       passwordRepeat: '',
-      subscribeToken: this.props.token,
+      inviteToken: this.props.token,
       _id: this.props._id
     };
   }
@@ -65,7 +73,7 @@ class RegisterPage extends PureComponent {
   render() {
     const {
       _id,
-      subscribeToken,
+      inviteToken,
       email,
       firstName,
       lastName,
@@ -73,14 +81,14 @@ class RegisterPage extends PureComponent {
       passwordRepeat
     } = this.state;
 
-    if (_id && subscribeToken) {
+    if (_id && inviteToken) {
       return (
         <App showNavigation={false} title="Register">
           <Mutation
             mutation={REGISTER_MUTATION}
             variables={{
               input: {
-                subscribeToken,
+                inviteToken,
                 firstName,
                 lastName,
                 password,
@@ -114,15 +122,12 @@ class RegisterPage extends PureComponent {
 
     return (
       <App showNavigation={false} title="Register">
-        <Mutation
-          mutation={SUBSCRIBE_MUTATION}
-          variables={{ input: { email } }}
-        >
-          {(subscribe, { loading, error, called }) => {
+        <Mutation mutation={INVITE_MUTATION} variables={{ input: { email } }}>
+          {(invite, { loading, error, called }) => {
             return (
               <Wrapper>
-                <SubscribeContainer
-                  subscribe={subscribe}
+                <InviteContainer
+                  invite={invite}
                   handleChange={this.handleChange}
                   email={email}
                   loading={loading}
@@ -137,13 +142,5 @@ class RegisterPage extends PureComponent {
     );
   }
 }
-
-const REGISTER_MUTATION = gql`
-  mutation Register($input: RegisterInput) {
-    Register(input: $input) {
-      token
-    }
-  }
-`;
 
 export default RegisterPage;
