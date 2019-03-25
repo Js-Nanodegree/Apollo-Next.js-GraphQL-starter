@@ -1,1 +1,1 @@
-export {default as subscribeMailer} from './auth/subscribe.mailer';
+export { default as inviteMailer } from './auth/invite.mailer';

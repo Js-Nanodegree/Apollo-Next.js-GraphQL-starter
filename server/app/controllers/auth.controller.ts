@@ -1,6 +1,5 @@
 import { DEV_URL, PROD_URL } from "../config/settings";
 import {
-  EmailAdreadyRegisteredError,
   InvalidEmailPasswordError,
   MissingRequiredFieldsError,
   NoUserError
@@ -10,10 +9,8 @@ import { IS_DEBUG, SESSION_DURATION } from "../config/env";
 import { SIGNING_KEY } from "../config/secrets";
 import Subscribe from "../models/invite.model";
 import User from "../models/user.model";
-import crypto from "crypto";
-import moment from "moment";
+
 import nJwt from "njwt";
-import { subscribeMailer } from "../mailers";
 import { IContext } from "../types/generic";
 
 type TgenerateTokenInput = {
@@ -75,7 +72,7 @@ async function register(
     passwordRepeat
   }: TregisterInput,
   context: IContext
-) {
+): Promise<any> {
   if (password !== passwordRepeat) {
     return Error("Passwords do not match");
   }
@@ -181,66 +178,7 @@ export interface ISubscribeInput {
   email: string;
 }
 
-async function subscribe({ email }: ISubscribeInput) {
-  const subscriber = await Subscribe.findOne({ email })
-    .then(data => {
-      return data;
-    })
-    .catch(error => {
-      throw error;
-    });
-
-  const token = crypto.randomBytes(18).toString("hex");
-  if (subscriber && !subscriber.active) {
-    throw new EmailAdreadyRegisteredError({
-      data: {
-        email
-      }
-    });
-  }
-
-  const timeSinceLastEmail = subscriber
-    ? moment().diff(moment(subscriber.updatedAt), "milliseconds")
-    : 9e6;
-
-  // Only let the use send a new email every 15 minutes
-  const delayBeforeNewRequest = 15 * 60000;
-
-  if (timeSinceLastEmail <= delayBeforeNewRequest) {
-    return {
-      message: `Confirmation emails can only be sent every ${delayBeforeNewRequest /
-        60000} minutes.`
-    };
-  }
-
-  if (subscriber) {
-    return Subscribe.findOneAndUpdate({ _id: subscriber._id }, { token })
-      .then(() => {
-        subscribeMailer({ email, id: subscriber._id, token });
-
-        return {
-          message: `A new confirmation email has been sent to ${email}`
-        };
-      })
-      .catch(error => {
-        throw error;
-      });
-  }
-
-  return Subscribe.create({ email, token })
-    .then(data => {
-      // Send a verification email to the user
-      subscribeMailer({ email, id: data._id, token });
-
-      return { message: `A confirmation email as been sent to ${email}` };
-    })
-    .catch(error => {
-      return error;
-    });
-}
-
 export default {
   register,
-  subscribe,
   login
 };

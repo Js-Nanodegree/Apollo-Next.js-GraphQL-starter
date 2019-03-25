@@ -1,3 +1,4 @@
+import { IResolvers } from 'apollo-server-express';
 import { IS_DEBUG } from '../../config/env';
 import authMutations from './auth.mutations';
 import authQueries from './auth.queries';
@@ -8,7 +9,7 @@ type TObject = {
   resolveType: string;
 }
 
-export default {
+const resolvers = {
   Node: {
     __resolveType(obj: TObject) {
       if (obj.resolveType) {
@@ -22,12 +23,14 @@ export default {
     }
   },
   Subscription: {},
-  Mutation: {
+  Mutation:  {
     ...authMutations,
     ...userMutations
-  },
+  } as IResolvers,
   Query: {
     ...authQueries,
     ...userQueries
   }
 };
+
+export default resolvers;

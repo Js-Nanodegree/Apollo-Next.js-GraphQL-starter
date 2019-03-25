@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer, IResolvers } from 'apollo-server-express';
 import { PubSub } from 'apollo-server-express';
 import { formatError } from 'apollo-errors';
 import resolvers from './resolvers';

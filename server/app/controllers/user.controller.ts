@@ -3,7 +3,7 @@ import moment from 'moment';
 import User from "../models/user.model";
 import Invite, {IInvite} from "../models/invite.model";
 import { IContext } from "../types/generic";
-import { subscribeMailer } from "../mailers";
+import { inviteMailer } from "../mailers";
 import {
   EmailAdreadyRegisteredError
 } from "./errors/auth.errors";
@@ -73,7 +73,7 @@ const token = crypto.randomBytes(18).toString("hex");
 if (invite) {
   return Invite.findOneAndUpdate({ _id: invite._id }, { token })
     .then(() => {
-      subscribeMailer({ email, id: invite._id, token });
+      inviteMailer({ email, _id: invite._id, token });
 
       return {
         message: `A new confirmation email has been sent to ${email}`
@@ -87,7 +87,7 @@ if (invite) {
 return Invite.create({ email, token, message, inviter: user ? user._id : null })
   .then(data => {
     // Send a verification email to the user
-    subscribeMailer({ email, id: data._id, token });
+    inviteMailer({ email, _id: data._id, token, inviter: user ? user : null });
 
     return { message: user ? `An invite email has been sent to ${email}` : `A confirmation email as been sent to ${email}` };
   })

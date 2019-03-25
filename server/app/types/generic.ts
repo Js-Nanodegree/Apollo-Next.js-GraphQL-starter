@@ -11,7 +11,7 @@ interface Error {
 }
 
 export interface IReq extends Request {
-  user: IUser | null;
+  user?: IUser | null;
 }
 
 export interface IError extends Error {
