@@ -18,5 +18,8 @@
     "dev:client": "npm --prefix client start",
     "deploy": "npm run --prefix server start && npm run --prefix frontend build",
     "setup": "npm run --prefix server setup"
+  },
+  "devDependencies": {
+    "@types/mongoose": "^5.3.23"
   }
 }

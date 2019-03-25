@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import * as mongoose from 'mongoose';
 import { IUser } from '../models/user.model';
 
+const ObjectId = mongoose.Types.ObjectId;
+
 export type TObjectId = {
   _id: mongoose.Types.ObjectId;
 };
@@ -11,7 +13,7 @@ interface Error {
 }
 
 export interface IReq extends Request {
-  user: IUser | null;
+  user: IUser;
 }
 
 export interface IError extends Error {

@@ -3,6 +3,8 @@ import { IContext } from "../../types/generic";
 import { Context } from "apollo-server-core";
 
 export default {
+  /* The subscribe function should be replaced with the invite function so it can be reused
+   for users inviting themselves and users inviting others from their company */
   Subscribe: (_: null, { input }: any) => {
     return Controller.subscribe({ ...input });
   },

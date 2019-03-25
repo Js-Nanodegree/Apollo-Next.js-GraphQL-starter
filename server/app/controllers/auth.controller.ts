@@ -8,7 +8,7 @@ import {
 import { IS_DEBUG, SESSION_DURATION } from "../config/env";
 
 import { SIGNING_KEY } from "../config/secrets";
-import Subscribe from "../models/subscribe.model";
+import Subscribe from "../models/invite.model";
 import User from "../models/user.model";
 import crypto from "crypto";
 import moment from "moment";
@@ -207,7 +207,6 @@ async function subscribe({ email }: ISubscribeInput) {
   const delayBeforeNewRequest = 15 * 60000;
 
   if (timeSinceLastEmail <= delayBeforeNewRequest) {
-    const timeLeftBeforeNewRequest = delayBeforeNewRequest - timeSinceLastEmail;
     return {
       message: `Confirmation emails can only be sent every ${delayBeforeNewRequest /
         60000} minutes.`
