@@ -24,6 +24,10 @@ Contributions in the form of PRs or issues are welcomed!
 
 ## Development:
 
+#### Test
+
+`yarn test`
+
 #### Server
 
 cd the the root of the project and use the following commands.
