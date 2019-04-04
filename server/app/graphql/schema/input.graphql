@@ -1,5 +1,5 @@
 input RegisterInput {
-  subscribeToken: String!
+  inviteToken: String!
   firstName: String!
   _id: String!
   lastName: String!

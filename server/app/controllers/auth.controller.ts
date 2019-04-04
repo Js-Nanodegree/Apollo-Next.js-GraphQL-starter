@@ -4,17 +4,26 @@ import {
   NoUserError
 } from './errors/auth.errors';
 import { SESSION_DURATION } from '../config/env';
-import Subscribe from '../models/invite.model';
+import Invite from '../models/invite.model';
 import User from '../models/user.model';
 import { IContext } from '../types/generic';
 import generateToken from '../utils/generateToken';
 
-type TdeactivateSubscribeTokenInput = {
+export interface ISubscribeInput {
+  email: string;
+}
+
+export default {
+  register,
+  login
+};
+
+type TdeactivateInviteTokenInput = {
   email: string;
 };
 
-function deactivateSubscribeToken({ email }: TdeactivateSubscribeTokenInput) {
-  return Subscribe.findOneAndUpdate(
+function deactivateSubscribeToken({ email }: TdeactivateInviteTokenInput) {
+  return Invite.findOneAndUpdate(
     { email },
     {
       $set: {
@@ -25,12 +34,12 @@ function deactivateSubscribeToken({ email }: TdeactivateSubscribeTokenInput) {
     .then(() => {
       return true;
     })
-    .catch(error => {
+    .catch((error: Error) => {
       return error;
     });
 }
 type TregisterInput = {
-  subscribeToken: string;
+  inviteToken: string;
   firstName: string;
   lastName: string;
   _id: string;
@@ -40,7 +49,7 @@ type TregisterInput = {
 
 async function register(
   {
-    subscribeToken,
+    inviteToken,
     firstName,
     lastName,
     _id,
@@ -65,7 +74,7 @@ async function register(
     });
   }
 
-  const subscription = await Subscribe.findById(_id)
+  const invite = await Invite.findById(_id)
     .then(data => {
       return data;
     })
@@ -73,22 +82,22 @@ async function register(
       throw error;
     });
 
-  if (!subscription) {
+  if (!invite) {
     return Error("You don't exist.");
   }
 
-  if (!subscription.active) {
+  if (!invite.active) {
     return Error('You have already registered. Please login.');
   }
 
   // Check the subscribeToken to make sure it is valid
-  if (subscription.token !== subscribeToken) {
+  if (invite.token !== inviteToken) {
     return Error('Invalid token.');
   }
 
   // Make sure you already use create here so the password is hashed with Mongoose's pre save middleware
   return User.create({
-    email: subscription.email,
+    email: invite.email,
     firstName,
     lastName,
     password
@@ -152,12 +161,3 @@ async function login(
 
   return { token };
 }
-
-export interface ISubscribeInput {
-  email: string;
-}
-
-export default {
-  register,
-  login
-};
