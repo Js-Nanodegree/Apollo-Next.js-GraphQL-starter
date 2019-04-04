@@ -18,6 +18,10 @@
 3. Sign up to MailGun and add your API details to the .env file
 4. Run yarn install in /frontend and in /server
 
+## Contributing
+
+Contributions in the form of PRs or issues are welcomed!
+
 ## Development:
 
 #### Server
