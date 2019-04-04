@@ -1,43 +1,19 @@
-import { DEV_URL, PROD_URL } from "../config/settings";
 import {
   InvalidEmailPasswordError,
   MissingRequiredFieldsError,
   NoUserError
-} from "./errors/auth.errors";
-import { IS_DEBUG, SESSION_DURATION } from "../config/env";
-
-import { SIGNING_KEY } from "../config/secrets";
-import Subscribe from "../models/invite.model";
-import User from "../models/user.model";
-
-import nJwt from "njwt";
-import { IContext } from "../types/generic";
-
-type TgenerateTokenInput = {
-  _id: string;
-};
-
-function generateToken({ _id }: TgenerateTokenInput) {
-  const claims = {
-    iss: IS_DEBUG ? DEV_URL : PROD_URL, // The URL of your service - update paths in ../config/settings
-    sub: _id // The UID of the user in your system - MongoDB _id
-  };
-
-  // This is our internal representation of the token, this is not what you'll send to your end user
-  const jwt = nJwt.create(claims, SIGNING_KEY);
-  jwt.setExpiration(new Date().getTime() + SESSION_DURATION);
-
-  // Base64 URL encoded string that is safe to pass to the browser
-  return jwt.compact();
-}
+} from './errors/auth.errors';
+import { SESSION_DURATION } from '../config/env';
+import Subscribe from '../models/invite.model';
+import User from '../models/user.model';
+import { IContext } from '../types/generic';
+import generateToken from '../utils/generateToken';
 
 type TdeactivateSubscribeTokenInput = {
   email: string;
 };
 
-function deactivateSubscribeToken(
-  { email }: TdeactivateSubscribeTokenInput
-) {
+function deactivateSubscribeToken({ email }: TdeactivateSubscribeTokenInput) {
   return Subscribe.findOneAndUpdate(
     { email },
     {
@@ -74,7 +50,7 @@ async function register(
   context: IContext
 ): Promise<any> {
   if (password !== passwordRepeat) {
-    return Error("Passwords do not match");
+    return Error('Passwords do not match');
   }
   if (!firstName || !lastName || !password || !passwordRepeat) {
     throw new MissingRequiredFieldsError({
@@ -102,12 +78,12 @@ async function register(
   }
 
   if (!subscription.active) {
-    return Error("You have already registered. Please login.");
+    return Error('You have already registered. Please login.');
   }
 
   // Check the subscribeToken to make sure it is valid
   if (subscription.token !== subscribeToken) {
-    return Error("Invalid token.");
+    return Error('Invalid token.');
   }
 
   // Make sure you already use create here so the password is hashed with Mongoose's pre save middleware
@@ -125,9 +101,9 @@ async function register(
       deactivateSubscribeToken({ email: user.email });
 
       // Set the token in a cookie
-      context.res.cookie("token", token, { maxAge: 3.154e10, httpOnly: true });
+      context.res.cookie('token', token, { maxAge: 3.154e10, httpOnly: true });
 
-      return { token, message: "Successfully registered" };
+      return { token, message: 'Successfully registered' };
     })
     .catch(error => {
       return error;
@@ -135,7 +111,10 @@ async function register(
 }
 
 async function login(
-  { email, password }: {
+  {
+    email,
+    password
+  }: {
     email: string;
     password: string;
   },
@@ -166,7 +145,7 @@ async function login(
 
   const token = await generateToken({ _id: user._id });
 
-  context.res.cookie("token", token, {
+  context.res.cookie('token', token, {
     maxAge: SESSION_DURATION,
     httpOnly: true
   });
