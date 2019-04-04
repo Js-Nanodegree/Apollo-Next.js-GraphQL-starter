@@ -30,7 +30,7 @@ app.prepare().then(() => {
   server.use('/static', express.static('static'));
 
   server.get('/', (req, res) => {
-    return app.render(req, res, '/home');
+    return app.render(req, res, '/index');
   });
 
   server.get('/login', (req, res) => {
