@@ -15,12 +15,9 @@
   "email": "tomanagle@gmail.com",
   "scripts": {
     "dev:server": "npm run --prefix server dev",
-    "dev:client": "npm --prefix client start",
+    "dev:frontend": "npm run --prefix frontend dev",
     "deploy": "npm run --prefix server start && npm run --prefix frontend build",
     "setup": "npm run --prefix server setup",
     "test": "npm run --prefix server test"
-  },
-  "devDependencies": {
-    "@types/mongoose": "^5.3.23"
   }
 }
