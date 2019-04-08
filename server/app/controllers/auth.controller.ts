@@ -3,10 +3,10 @@ import {
   MissingRequiredFieldsError,
   NoUserError
 } from './errors/auth.errors';
-import { SESSION_DURATION } from '../config/env';
+import {SESSION_DURATION} from '../config/env';
 import Invite from '../models/invite.model';
 import User from '../models/user.model';
-import { IContext } from '../types/generic';
+import {IContext} from '../types/generic';
 import generateToken from '../utils/generateToken';
 
 export interface ISubscribeInput {
@@ -22,9 +22,9 @@ type TdeactivateInviteTokenInput = {
   email: string;
 };
 
-function deactivateSubscribeToken({ email }: TdeactivateInviteTokenInput) {
+function deactivateSubscribeToken({email}: TdeactivateInviteTokenInput) {
   return Invite.findOneAndUpdate(
-    { email },
+    {email},
     {
       $set: {
         active: false
@@ -83,7 +83,7 @@ async function register(
     });
 
   if (!invite) {
-    return Error("You don't exist.");
+    return Error('You don\'t exist.');
   }
 
   if (!invite.active) {
@@ -104,15 +104,15 @@ async function register(
   })
     .then(async user => {
       const _id = user._id;
-      const token = await generateToken({ _id });
+      const token = await generateToken({_id});
 
       // Change the active param to false on the subscribe token
-      deactivateSubscribeToken({ email: user.email });
+      deactivateSubscribeToken({email: user.email});
 
       // Set the token in a cookie
-      context.res.cookie('token', token, { maxAge: 3.154e10, httpOnly: true });
+      context.res.cookie('token', token, {maxAge: 3.154e10, httpOnly: true});
 
-      return { token, message: 'Successfully registered' };
+      return {token, message: 'Successfully registered'};
     })
     .catch(error => {
       return error;
@@ -129,12 +129,12 @@ async function login(
   },
   context: IContext
 ) {
-  const user = await User.findOne({ email })
+  const user = await User.findOne({email})
     .then(data => {
       return data;
     })
     .catch(error => {
-      console.log({ error });
+      console.log({error});
       throw error;
     });
 
@@ -152,12 +152,12 @@ async function login(
     throw new InvalidEmailPasswordError();
   }
 
-  const token = await generateToken({ _id: user._id });
+  const token = await generateToken({_id: user._id});
 
   context.res.cookie('token', token, {
     maxAge: SESSION_DURATION,
     httpOnly: true
   });
 
-  return { token };
+  return {token};
 }

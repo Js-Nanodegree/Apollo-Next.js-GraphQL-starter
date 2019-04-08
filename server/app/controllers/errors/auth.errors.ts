@@ -1,5 +1,17 @@
 import { createError } from 'apollo-errors';
 
+export {
+  UnauthorizedRequestError,
+  NoUserError,
+  InvalidEmailPasswordError,
+  MissingRequiredFieldsError,
+  EmailAdreadyRegisteredError
+};
+
+const UnauthorizedRequestError = createError('UnauthorizedRequestError', {
+  message: 'You are not authorized to perform that action.'
+});
+
 const NoUserError = createError('NoUserError', {
   message: 'That email is not registered.'
 });
@@ -16,9 +28,3 @@ const EmailAdreadyRegisteredError = createError('EmailAdreadyRegisteredError', {
   message: 'That email is already registered.'
 });
 
-export {
-  NoUserError,
-  InvalidEmailPasswordError,
-  MissingRequiredFieldsError,
-  EmailAdreadyRegisteredError
-};

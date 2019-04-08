@@ -4,6 +4,8 @@ import authMutations from './auth.mutations';
 import authQueries from './auth.queries';
 import userMutations from './user.mutations';
 import userQueries from './user.queries';
+import inviteMutation from './invite.mutation';
+import inviteQueries from './invite.queries';
 
 type TObject = {
   resolveType: string;
@@ -25,12 +27,14 @@ const resolvers = {
   Subscription: {},
   Mutation:  {
     ...authMutations,
-    ...userMutations
+    ...userMutations,
+    ...inviteMutation
   } as IResolvers,
   Query: {
     ...authQueries,
-    ...userQueries
-  }
+    ...userQueries,
+    ...inviteQueries
+  } as IResolvers
 };
 
 export default resolvers;

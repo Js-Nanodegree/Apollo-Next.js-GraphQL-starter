@@ -12,5 +12,15 @@ type User implements Node {
   updatedAt: Date!
 }
 
+type Invite implements Node {
+  _id: ID!
+  email: String!
+  active: Boolean!
+  token: String
+  message: String
+  createdAt: Date!
+  updatedAt: Date!
+}
+
 scalar Date
 scalar Number
