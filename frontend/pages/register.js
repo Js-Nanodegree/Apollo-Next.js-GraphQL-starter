@@ -1,12 +1,16 @@
+/*
+ * There are two parts to registration
+ * 1) The user must enter their email address and click on the link in their inbox. This forces them to confirm their email address.
+ * 2) The user lands back on this page with their invite object _id and their invite token. They then get the rest of the registration form.
+ */
 import React, { PureComponent } from 'react';
-
-import App from '../components/App';
 import { Mutation } from 'react-apollo';
-import RegisterContainer from '../containers/Register';
-import InviteContainer from '../containers/Invite';
 import gql from 'graphql-tag';
 import Paper from '@material-ui/core/Paper';
 import styled from 'styled-components';
+import PreRegisterContainer from '../containers/PreRegister';
+import RegisterContainer from '../containers/Register';
+import App from '../components/App';
 
 const Outer = styled.div`
   width: 100%;
@@ -54,18 +58,19 @@ class RegisterPage extends PureComponent {
 
   constructor(props) {
     super(props);
+    const { token, _id } = this.props;
     this.state = {
       email: '',
       firstName: '',
       lastName: '',
       password: '',
       passwordRepeat: '',
-      inviteToken: this.props.token,
-      _id: this.props._id
+      inviteToken: token,
+      _id
     };
   }
 
-  handleChange = event => {
+  handleChange = (event) => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
   };
@@ -83,7 +88,7 @@ class RegisterPage extends PureComponent {
 
     if (_id && inviteToken) {
       return (
-        <App showNavigation={false} title="Register">
+        <App showNavigation={false} title='Register'>
           <Mutation
             mutation={REGISTER_MUTATION}
             variables={{
@@ -97,46 +102,42 @@ class RegisterPage extends PureComponent {
               }
             }}
           >
-            {(register, { loading, error, called }) => {
-              return (
-                <Wrapper>
-                  <RegisterContainer
-                    loading={loading}
-                    called={called}
-                    register={register}
-                    handleChange={this.handleChange}
-                    email={email}
-                    error={error}
-                    firstName={firstName}
-                    lastName={lastName}
-                    password={password}
-                    passwordRepeat={passwordRepeat}
-                  />
-                </Wrapper>
-              );
-            }}
+            {(register, { loading, error, called }) => (
+              <Wrapper>
+                <RegisterContainer
+                  loading={loading}
+                  called={called}
+                  register={register}
+                  handleChange={this.handleChange}
+                  email={email}
+                  error={error}
+                  firstName={firstName}
+                  lastName={lastName}
+                  password={password}
+                  passwordRepeat={passwordRepeat}
+                />
+              </Wrapper>
+            )}
           </Mutation>
         </App>
       );
     }
 
     return (
-      <App showNavigation={false} title="Register">
+      <App showNavigation={false} title='Register'>
         <Mutation mutation={INVITE_MUTATION} variables={{ input: { email } }}>
-          {(invite, { loading, error, called }) => {
-            return (
-              <Wrapper>
-                <InviteContainer
-                  invite={invite}
-                  handleChange={this.handleChange}
-                  email={email}
-                  loading={loading}
-                  error={error}
-                  called={called}
-                />
-              </Wrapper>
-            );
-          }}
+          {(invite, { loading, error, called }) => (
+            <Wrapper>
+              <PreRegisterContainer
+                invite={invite}
+                handleChange={this.handleChange}
+                email={email}
+                loading={loading}
+                error={error}
+                called={called}
+              />
+            </Wrapper>
+          )}
         </Mutation>
       </App>
     );

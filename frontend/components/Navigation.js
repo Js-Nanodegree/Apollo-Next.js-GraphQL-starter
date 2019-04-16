@@ -1,23 +1,20 @@
 import React, { Component, Fragment } from 'react';
-
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Link from 'next/link';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Me from '../components/queries/Me.query';
+import { string } from 'prop-types';
+import styled from 'styled-components';
+import Me from './queries/Me.query';
+
+const NavContainer = styled(AppBar)`
+  flex-grow: 1;
+`;
 
 class Navigation extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  handleMenu = event => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
-
-  handleClose = () => {
-    this.setState({ anchorEl: null });
+  static propTypes = {
+    title: string.isRequired
   };
 
   render() {
@@ -25,24 +22,30 @@ class Navigation extends Component {
 
     return (
       <Fragment>
-        <AppBar position="static" classes={{ root: 'nav-container' }}>
+        <NavContainer position='static' classes={{ root: 'nav-container' }}>
           <Toolbar>
-            <Typography color="inherit" style={{ flexGrow: 1 }}>
+            <Typography color='inherit' style={{ flexGrow: 1 }}>
               {title}
             </Typography>
 
             <Me>
               {({ data: { Me: user } }) => {
                 if (user) {
-                  return <p>Welcome {user.firstName}</p>;
+                  return (
+                    <>
+                      <Link prefetch href='/invite'>
+                        <Button type='button'>Invite</Button>
+                      </Link>
+                    </>
+                  );
                 }
 
                 return (
                   <Fragment>
-                    <Link prefetch href="/login">
+                    <Link prefetch href='/login'>
                       <Button>Login</Button>
                     </Link>
-                    <Link prefetch href="/register">
+                    <Link prefetch href='/register'>
                       <Button>Register</Button>
                     </Link>
                   </Fragment>
@@ -50,14 +53,7 @@ class Navigation extends Component {
               }}
             </Me>
           </Toolbar>
-        </AppBar>
-
-        <style jsx>{`
-          .nav-container {
-            flex-grow: 1;
-            background-color: #fff !important;
-          }
-        `}</style>
+        </NavContainer>
       </Fragment>
     );
   }

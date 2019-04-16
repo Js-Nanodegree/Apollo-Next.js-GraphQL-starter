@@ -36,8 +36,13 @@ app.prepare().then(() => {
   server.get('/login', (req, res) => {
     return app.render(req, res, '/login');
   });
+
   server.get('/settings', (req, res) => {
     return app.render(req, res, '/settings');
+  });
+
+  server.get('/invite', (req, res) => {
+    return app.render(req, res, '/invite');
   });
 
   server.get('/register/:id/:token', (req, res) => {

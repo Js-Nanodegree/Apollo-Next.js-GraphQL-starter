@@ -25,8 +25,8 @@ class RegisterContainer extends PureComponent {
           <h1>Thank you</h1>
           <p>Your account is now active.</p>
           <br />
-          <p className="text-align__center">
-            <a href="/">HOME</a>
+          <p className='text-align__center'>
+            <a href='/'>HOME</a>
           </p>
         </>
       );
@@ -34,48 +34,48 @@ class RegisterContainer extends PureComponent {
 
     if (error && error.graphQLErrors) {
       return error.graphQLErrors.map(err => (
-        <p className="error-message">{err.message}</p>
+        <p className='error-message'>{err.message}</p>
       ));
     }
 
     return (
       <Fragment>
-        <div className="content-middle">
+        <div className='content-middle'>
           <form
-            className="form-wrapper"
-            onSubmit={e => {
+            className='form-wrapper'
+            onSubmit={(e) => {
               e.preventDefault();
               return register();
             }}
           >
-            <div className="form__inner">
+            <div className='form__inner'>
               <h1>Complete your registration</h1>
               <TextField
                 fullWidth
                 onChange={handleChange}
-                name="firstName"
+                name='firstName'
                 value={firstName}
-                label="First name"
-                autoComplete="first-name"
+                label='First name'
+                autoComplete='first-name'
               />
               <br />
               <TextField
                 fullWidth
                 onChange={handleChange}
-                name="lastName"
+                name='lastName'
                 value={lastName}
-                label="Last name"
-                autoComplete="last-name"
+                label='Last name'
+                autoComplete='last-name'
               />
               <br />
               <TextField
                 fullWidth
                 onChange={handleChange}
-                name="password"
+                name='password'
                 value={password}
-                label="Password"
-                type="password"
-                autoComplete="new-password"
+                label='Password'
+                type='password'
+                autoComplete='new-password'
               />
               <br />
               <TextField
@@ -84,47 +84,49 @@ class RegisterContainer extends PureComponent {
                   !!password && !!passwordRepeat && password !== passwordRepeat
                 }
                 onChange={handleChange}
-                name="passwordRepeat"
+                name='passwordRepeat'
                 value={passwordRepeat}
-                label="Repeat password"
-                type="password"
-                autoComplete="repeat-password"
+                label='Repeat password'
+                type='password'
+                autoComplete='repeat-password'
               />
               <br />
               <br />
               <Button
                 fullWidth
                 disabled={
-                  !firstName ||
-                  !lastName ||
-                  !password ||
-                  !passwordRepeat ||
-                  !(password === passwordRepeat) ||
-                  loading
+                  !firstName
+                  || !lastName
+                  || !password
+                  || !passwordRepeat
+                  || !(password === passwordRepeat)
+                  || loading
                 }
-                type="submit"
+                type='submit'
               >
                 {loading ? 'REGISTERING' : 'REGISTER'}
               </Button>
             </div>
           </form>
         </div>
-        <style jsx>{`
-          .content-middle {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-          }
-          .form-wrapper {
-            width: 100%;
-            max-width: 450px;
-            margin: 0 auto;
-          }
-          .form__inner {
-            padding: 1rem;
-          }
-        `}</style>
+        <style jsx>
+          {`
+            .content-middle {
+              height: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            .form-wrapper {
+              width: 100%;
+              max-width: 450px;
+              margin: 0 auto;
+            }
+            .form__inner {
+              padding: 1rem;
+            }
+          `}
+        </style>
       </Fragment>
     );
   }
