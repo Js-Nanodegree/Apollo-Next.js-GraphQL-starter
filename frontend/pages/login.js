@@ -1,9 +1,11 @@
+import { Mutation } from 'react-apollo';
+import gql from 'graphql-tag';
 import React, { PureComponent } from 'react';
 import Router from 'next/router';
 import App from '../components/App';
 import LoginContainer from '../containers/Login';
-import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
+
+import { CURRENT_USER_QUERY } from '../constants/queries';
 
 const LOGIN_MUTATION = gql`
   mutation login($input: LoginInput) {
@@ -34,10 +36,11 @@ class LoginPage extends PureComponent {
   render() {
     const { email, password } = this.state;
     return (
-      <App showNavigation={false} title='Login'>
+      <App showNavigation={false} title="Login">
         <Mutation
           mutation={LOGIN_MUTATION}
           onCompleted={() => this.handleSuccess()}
+          refetchQueries={[{ query: CURRENT_USER_QUERY }]}
           variables={{
             input: {
               email,
