@@ -109,7 +109,6 @@ class RegisterPage extends PureComponent {
                   called={called}
                   register={register}
                   handleChange={this.handleChange}
-                  email={email}
                   error={error}
                   firstName={firstName}
                   lastName={lastName}

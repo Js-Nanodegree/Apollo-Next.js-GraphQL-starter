@@ -1,10 +1,23 @@
-import React, { Fragment, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import Button from '@material-ui/core/Button';
-import PropTypes from 'prop-types';
+import {
+  bool, string, func, array
+} from 'prop-types';
 import TextField from '@material-ui/core/TextField';
+import FormWrapper from '../components/FormWrapper';
 
 class RegisterContainer extends PureComponent {
-  static propTypes = {};
+  static propTypes = {
+    called: bool.isRequired,
+    firstName: string.isRequired,
+    lastName: string.isRequired,
+    loading: bool.isRequired,
+    password: string.isRequired,
+    passwordRepeat: string.isRequired,
+    handleChange: func.isRequired,
+    register: func.isRequired,
+    error: array
+  };
 
   render() {
     const {
@@ -39,7 +52,7 @@ class RegisterContainer extends PureComponent {
     }
 
     return (
-      <Fragment>
+      <FormWrapper>
         <div className='content-middle'>
           <form
             className='form-wrapper'
@@ -109,25 +122,7 @@ class RegisterContainer extends PureComponent {
             </div>
           </form>
         </div>
-        <style jsx>
-          {`
-            .content-middle {
-              height: 100%;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            }
-            .form-wrapper {
-              width: 100%;
-              max-width: 450px;
-              margin: 0 auto;
-            }
-            .form__inner {
-              padding: 1rem;
-            }
-          `}
-        </style>
-      </Fragment>
+      </FormWrapper>
     );
   }
 }
