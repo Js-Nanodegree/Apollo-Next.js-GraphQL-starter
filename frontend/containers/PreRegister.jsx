@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
-import { bool, func, string } from 'prop-types';
+import {
+  bool, func, string, array
+} from 'prop-types';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
@@ -9,7 +11,9 @@ class PreRegisterContainer extends PureComponent {
     handleChange: func.isRequired,
     invite: func.isRequired,
     email: string.isRequired,
-    loading: bool
+    loading: bool.isRequired,
+    error: array,
+    called: bool.isRequired
   };
 
   render() {
