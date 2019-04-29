@@ -1,19 +1,10 @@
-import React, { PureComponent, Fragment } from 'react'
-import { func, arrayOf, shape, number, string } from 'prop-types'
+import React, { Fragment } from 'react';
 
-export default class extends PureComponent {
+const HomeContainer = ({ Me }) => (
+  <Fragment>
+    <h1>Apollo starter</h1>
+    Me: {JSON.stringify(Me)}
+  </Fragment>
+);
 
-  static propTypes = {}
-
-  render () {
-    const {Me} = this.props
-    return (
-      <Fragment>
-
-        <h1>Apollo starter</h1>
-        Me: {JSON.stringify(Me)}
-
-      </Fragment>
-    )
-  }
-}
+export default HomeContainer;
