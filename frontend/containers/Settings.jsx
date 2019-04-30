@@ -1,15 +1,15 @@
 import React from 'react';
 import { MeProps } from '../components/queries/Me.query';
 
-const SettingsContainer = ({ Me }) => (
+const SettingsContainer = ({ user }) => (
   <>
     <h1>Settings</h1>
-    Me: {JSON.stringify(Me)}
+    {JSON.stringify(user)}
   </>
 );
 
 SettingsContainer.propTypes = {
-  Me: MeProps
+  user: MeProps
 };
 
 export default SettingsContainer;

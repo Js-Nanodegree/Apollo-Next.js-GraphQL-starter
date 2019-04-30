@@ -7,8 +7,8 @@ class InvitePage extends PureComponent {
   render() {
     return (
       <Me>
-        {({ data: { Me: me } }) => (
-          <App me={me} showNavigation title='Invite'>
+        {({ data: { Me: user } }) => (
+          <App user={user} showNavigation title='Invite'>
             <InviteContainer />
           </App>
         )}

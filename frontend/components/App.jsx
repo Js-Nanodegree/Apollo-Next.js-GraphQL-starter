@@ -6,7 +6,7 @@ import Navigation from './Navigation';
 import { MeProps } from './queries/Me.query';
 
 const App = ({
-  children, title, link, meta, showNavigation, me
+  children, title, showNavigation, user
 }) => (
   <div className='fullHeight'>
     <Head>
@@ -18,7 +18,7 @@ const App = ({
       />
     </Head>
 
-    {showNavigation ? <Navigation title={title} Me={me} /> : null}
+    {showNavigation ? <Navigation title={title} user={user} /> : null}
 
     <main id='main'>{children}</main>
   </div>
@@ -28,9 +28,7 @@ App.propTypes = {
   showNavigation: bool,
   title: string.isRequired,
   children: oneOfType([arrayOf(node), node]).isRequired,
-  link: string,
-  meta: string,
-  me: MeProps
+  user: MeProps
 };
 
 App.defaultProps = {
