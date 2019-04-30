@@ -1,15 +1,10 @@
-import {IContext} from 'generic';
+import { IContext } from 'generic';
 import crypto from 'crypto';
 import moment from 'moment';
-import {UnauthorizedRequestError} from '../controllers/errors/auth.errors';
-import Invite, {IInvite} from '../models/invite.model';
-import {inviteMailer} from '../mailers';
-import {EmailAdreadyRegisteredError} from './errors/auth.errors';
-
-export default {
-  invite,
-  getInvites
-};
+import { UnauthorizedRequestError } from '../controllers/errors/auth.errors';
+import Invite, { IInvite } from '../models/invite.model';
+import { inviteMailer } from '../mailers';
+import { EmailAdreadyRegisteredError } from './errors/auth.errors';
 
 /* Users can invite themselves to confirm their email address before registration,
  * or a user can invite another user. The workflow in either case is:
@@ -19,23 +14,23 @@ export default {
  * 4) If it is a B2B application the user can be added to the inviter's company
  * If the email is already registered, another confirmation email will be sent to the user
  */
-export type TinviteInput = {
+export interface TinviteInput {
   email: string;
   message: string;
-};
+}
 
-async function invite({email, message}: TinviteInput, context: IContext) {
+async function invite({ email, message }: TinviteInput, context: IContext) {
   // Check that the email doesn't already exist in the subscribe model
 
-  const {user} = context.req;
+  const { user } = context.req;
 
-  const sub = await Invite.findOne({email}).exec();
+  const sub = await Invite.findOne({ email }).exec();
   if (sub) {
     throw new Error('That email has already been invited');
   }
 
   /* Get the invite to run various checks on it */
-  const invite = await Invite.findOne({email})
+  const invite = await Invite.findOne({ email })
     .then((data: IInvite | null) => {
       return data;
     })
@@ -69,9 +64,9 @@ async function invite({email, message}: TinviteInput, context: IContext) {
   const token = crypto.randomBytes(18).toString('hex');
 
   if (invite) {
-    return Invite.findOneAndUpdate({_id: invite._id}, {token})
+    return Invite.findOneAndUpdate({ _id: invite._id }, { token })
       .then(() => {
-        inviteMailer({email, _id: invite._id, token});
+        inviteMailer({ email, _id: invite._id, token });
 
         return {
           message: `A new confirmation email has been sent to ${email}`
@@ -127,22 +122,27 @@ export interface IgetInvitesInput {
 }
 
 function getInvites(
-  {limit, skip, sort_field, sort_order}: IgetInvitesInput,
+  { limit, skip, sort_field, sort_order }: IgetInvitesInput,
   context: IContext
 ): Promise<IInvite[] | []> {
   const sortField = sort_field ? sort_field : 'createdAt';
   const sortOrder = sort_order === 'DEC' ? -1 : 1;
 
-  const {user} = context.req;
+  const { user } = context.req;
 
   if (!user) {
     throw new UnauthorizedRequestError();
   }
 
-  return Invite.find({inviter: user._id})
-    .sort({[sortField]: sortOrder})
+  return Invite.find({ inviter: user._id })
+    .sort({ [sortField]: sortOrder })
     .limit(limit || 10)
     .skip(skip || 0)
     .lean()
     .exec();
 }
+
+export default {
+  invite,
+  getInvites
+};

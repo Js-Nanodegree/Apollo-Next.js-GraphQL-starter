@@ -1,4 +1,4 @@
-import {IContext} from '../types/generic';
+import { IContext } from '../types/generic';
 
 /*
  * Sends the user that exists on the request object

@@ -1,16 +1,16 @@
-import {Request, Response} from 'express';
+import { Request, Response } from 'express';
 import { ApolloServer, IResolvers } from 'apollo-server-express';
 import { PubSub } from 'apollo-server-express';
 import { formatError } from 'apollo-errors';
 import resolvers from './resolvers';
 import typeDefs from './schema';
 
-type TContext = {
+interface TContext {
   req: Request;
-  res: Response
+  res: Response;
 }
 
-type TInfo = {
+interface TInfo {
   queryString: string;
 }
 
@@ -23,7 +23,7 @@ export const pubsub = new PubSub();
 export default new ApolloServer({
   typeDefs,
   resolvers,
- // options,
+  // options,
   formatError: (error: Error) => {
     console.log(error);
     return error;

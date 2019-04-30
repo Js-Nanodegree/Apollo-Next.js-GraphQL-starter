@@ -1,5 +1,3 @@
-import AuthController from '../../controllers/auth.controller';
+import Controller from '../../controllers/auth.controller';
 
-export default {
-
-}
+export default {};

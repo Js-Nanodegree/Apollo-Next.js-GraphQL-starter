@@ -1,18 +1,18 @@
-import cookieParser from "cookie-parser";
-import bodyParser from "body-parser";
-import express from "express";
-import loggaroo from "loggaroo";
-import logger from "morgan";
-import ApolloServer from "./graphql";
-import { ENV } from "./config/env";
-import connect from "./init/connect";
-import deserialiseUser from "./middleware/deserialiseUser";
-import methodOverride from "method-override";
-import { port } from "./config/settings";
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import express from 'express';
+import loggaroo from 'loggaroo';
+import logger from 'morgan';
+import ApolloServer from './graphql';
+import { ENV } from './config/env';
+import connect from './init/connect';
+import deserialiseUser from './middleware/deserialiseUser';
+import methodOverride from 'method-override';
+import { port } from './config/settings';
 
 const app = express();
 
-const debug = require("debug")("apily:server");
+const debug = require('debug')('apily:server');
 
 app.use(
   logger(function(tokens, req, res) {
@@ -20,11 +20,11 @@ app.use(
       tokens.method(req, res),
       tokens.url(req, res),
       tokens.status(req, res),
-      tokens.res(req, res, "content-length"),
-      "-",
-      tokens["response-time"](req, res),
-      "ms"
-    ].join(" ");
+      tokens.res(req, res, 'content-length'),
+      '-',
+      tokens['response-time'](req, res),
+      'ms'
+    ].join(' ');
   })
 );
 app.use(bodyParser.json());
@@ -32,19 +32,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride());
 app.use(cookieParser());
 
-const http = require("http");
+const http = require('http');
 
-app.set("port", port);
+app.set('port', port);
 
 const server = http.createServer(app);
 
 function onListening() {
   const addr = server.address();
   loggaroo.info(
-    "Server running on port " + addr.port + " in " + ENV + " mode."
+    'Server running on port ' + addr.port + ' in ' + ENV + ' mode.'
   );
-  const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
-  debug("Listening on " + bind);
+  const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+  debug('Listening on ' + bind);
 }
 
 /* ===============================================
@@ -57,20 +57,20 @@ interface IError extends Error {
 }
 
 function onError(error: IError) {
-  if (error.syscall !== "listen") {
+  if (error.syscall !== 'listen') {
     throw error;
   }
 
-  const bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
+  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
-    case "EACCES":
-      loggaroo.error(bind + " requires elevated privileges");
+    case 'EACCES':
+      loggaroo.error(bind + ' requires elevated privileges');
       process.exit(1);
       break;
-    case "EADDRINUSE":
-      loggaroo.error(bind + " is already in use");
+    case 'EADDRINUSE':
+      loggaroo.error(bind + ' is already in use');
       process.exit(1);
       break;
     default:
@@ -92,5 +92,5 @@ ApolloServer.applyMiddleware({ app });
 ApolloServer.installSubscriptionHandlers(server);
 
 server.listen(port);
-server.on("error", onError);
-server.on("listening", onListening);
+server.on('error', onError);
+server.on('listening', onListening);

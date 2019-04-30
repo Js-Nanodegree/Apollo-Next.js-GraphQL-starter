@@ -3,49 +3,51 @@ import {
   MissingRequiredFieldsError,
   NoUserError
 } from './errors/auth.errors';
-import {SESSION_DURATION} from '../config/env';
-import Invite from '../models/invite.model';
+import { SESSION_DURATION } from '../config/env';
+import Invite, { IInvite } from '../models/invite.model';
 import User from '../models/user.model';
-import {IContext} from '../types/generic';
+import { IContext } from '../types/generic';
 import generateToken from '../utils/generateToken';
 
-export interface ISubscribeInput {
+export interface SubscribeInput {
   email: string;
 }
 
-export default {
-  register,
-  login
-};
-
-type TdeactivateInviteTokenInput = {
+interface TdeactivateInviteTokenInput {
   email: string;
-};
+}
 
-function deactivateSubscribeToken({email}: TdeactivateInviteTokenInput) {
+function deactivateSubscribeToken({
+  email
+}: TdeactivateInviteTokenInput): Promise<boolean | Error> {
   return Invite.findOneAndUpdate(
-    {email},
+    { email },
     {
       $set: {
         active: false
       }
     }
   )
-    .then(() => {
-      return true;
-    })
-    .catch((error: Error) => {
-      return error;
-    });
+    .then(
+      (): boolean => {
+        return true;
+      }
+    )
+    .catch(
+      (error: Error): Error => {
+        throw error;
+      }
+    );
 }
-type TregisterInput = {
+
+interface TregisterInput {
   inviteToken: string;
   firstName: string;
   lastName: string;
   _id: string;
   password: string;
   passwordRepeat: string;
-};
+}
 
 async function register(
   {
@@ -75,15 +77,17 @@ async function register(
   }
 
   const invite = await Invite.findById(_id)
-    .then(data => {
-      return data;
-    })
-    .catch(error => {
+    .then(
+      (data): IInvite | null => {
+        return data;
+      }
+    )
+    .catch((error: Error) => {
       throw error;
     });
 
   if (!invite) {
-    return Error('You don\'t exist.');
+    return Error('You do not exist.');
   }
 
   if (!invite.active) {
@@ -102,21 +106,28 @@ async function register(
     lastName,
     password
   })
-    .then(async user => {
-      const _id = user._id;
-      const token = await generateToken({_id});
+    .then(
+      async (user): Promise<{ token: string; message: string }> => {
+        const _id = user._id;
+        const token = await generateToken({ _id });
 
-      // Change the active param to false on the subscribe token
-      deactivateSubscribeToken({email: user.email});
+        // Change the active param to false on the subscribe token
+        deactivateSubscribeToken({ email: user.email });
 
-      // Set the token in a cookie
-      context.res.cookie('token', token, {maxAge: 3.154e10, httpOnly: true});
+        // Set the token in a cookie
+        context.res.cookie('token', token, {
+          maxAge: 3.154e10,
+          httpOnly: true
+        });
 
-      return {token, message: 'Successfully registered'};
-    })
-    .catch(error => {
-      return error;
-    });
+        return { token, message: 'Successfully registered' };
+      }
+    )
+    .catch(
+      (error: Error): Error => {
+        return error;
+      }
+    );
 }
 
 async function login(
@@ -129,12 +140,11 @@ async function login(
   },
   context: IContext
 ) {
-  const user = await User.findOne({email})
+  const user = await User.findOne({ email })
     .then(data => {
       return data;
     })
-    .catch(error => {
-      console.log({error});
+    .catch((error: Error) => {
       throw error;
     });
 
@@ -152,12 +162,17 @@ async function login(
     throw new InvalidEmailPasswordError();
   }
 
-  const token = await generateToken({_id: user._id});
+  const token = await generateToken({ _id: user._id });
 
   context.res.cookie('token', token, {
     maxAge: SESSION_DURATION,
     httpOnly: true
   });
 
-  return {token};
+  return { token };
 }
+
+export default {
+  register,
+  login
+};
