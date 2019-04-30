@@ -3,6 +3,9 @@ import Button from '@material-ui/core/Button';
 import Link from 'next/link';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
+import {
+  array, func, string, bool
+} from 'prop-types';
 
 const LoginContainer = ({
   error,
@@ -75,5 +78,14 @@ const LoginContainer = ({
     </style>
   </>
 );
+
+LoginContainer.propTypes = {
+  error: array,
+  handleLogin: func.isRequired,
+  email: string.isRequired,
+  password: string.isRequired,
+  handleChange: func.isRequired,
+  loading: bool.isRequired
+};
 
 export default LoginContainer;
