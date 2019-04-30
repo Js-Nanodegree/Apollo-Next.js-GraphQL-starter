@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
-
 import App from '../components/App';
-import { CurentUserConsumer } from './_app';
-import HomeContainer from '../containers/Home';
-import Loading from '../components/Loading';
-import { compose } from 'react-apollo';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-import withData from '../lib/withData';
-import { withRouter } from 'next/router';
+import { user } from '../constants/props';
 
 class HomePage extends Component {
+  static propTypes = {
+    Me: user
+  };
+
   constructor(props) {
     super(props);
     this.state = {};
@@ -19,7 +15,7 @@ class HomePage extends Component {
   render() {
     const { Me } = this.props;
     return (
-      <App showNavigation title="Home">
+      <App showNavigation title='Home'>
         <div>
           <h1>Home</h1>
         </div>
@@ -27,16 +23,5 @@ class HomePage extends Component {
     );
   }
 }
-
-const QUERIES = gql`
-  query {
-    Me {
-      _id
-      firstName
-      lastName
-      email
-    }
-  }
-`;
 
 export default HomePage;
