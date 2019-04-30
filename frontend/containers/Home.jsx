@@ -1,15 +1,15 @@
-import React, { Fragment } from 'react';
-import { user } from '../constants/props';
+import React from 'react';
+import { MeProps } from '../components/queries/Me.query';
 
 const HomeContainer = ({ Me }) => (
-  <Fragment>
+  <>
     <h1>Apollo starter</h1>
     Me: {JSON.stringify(Me)}
-  </Fragment>
+  </>
 );
 
 HomeContainer.propTypes = {
-  Me: user
+  Me: MeProps
 };
 
 export default HomeContainer;
