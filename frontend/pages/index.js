@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import App from '../components/App';
-import { user } from '../constants/props';
 
 class HomePage extends Component {
-  static propTypes = {
-    Me: user
-  };
+  static propTypes = {};
 
   constructor(props) {
     super(props);
@@ -13,7 +10,6 @@ class HomePage extends Component {
   }
 
   render() {
-    const { Me } = this.props;
     return (
       <App showNavigation title='Home'>
         <div>

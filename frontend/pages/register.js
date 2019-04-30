@@ -8,6 +8,9 @@ import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import Paper from '@material-ui/core/Paper';
 import styled from 'styled-components';
+import {
+  node, oneOfType, arrayOf, string
+} from 'prop-types';
 import PreRegisterContainer from '../containers/PreRegister';
 import RegisterContainer from '../containers/Register';
 import App from '../components/App';
@@ -52,6 +55,11 @@ const REGISTER_MUTATION = gql`
 `;
 
 class RegisterPage extends PureComponent {
+  static propTypes = {
+    token: string,
+    _id: string
+  };
+
   static getInitialProps({ query }) {
     return { _id: query ? query._id : null, token: query ? query.token : null };
   }
@@ -142,5 +150,9 @@ class RegisterPage extends PureComponent {
     );
   }
 }
+
+Wrapper.propTypes = {
+  children: oneOfType([arrayOf(node), node]).isRequired
+};
 
 export default RegisterPage;

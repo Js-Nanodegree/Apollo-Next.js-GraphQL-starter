@@ -1,3 +1,3 @@
-export default (data) => {
-    return <p>error</p>
-}
+const Error = () => <p>error</p>;
+
+export default Error;

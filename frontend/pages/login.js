@@ -24,7 +24,7 @@ class LoginPage extends PureComponent {
     };
   }
 
-  handleChange = event => {
+  handleChange = (event) => {
     const { name, value } = event.target;
     return this.setState({ [name]: value });
   };
@@ -36,7 +36,7 @@ class LoginPage extends PureComponent {
   render() {
     const { email, password } = this.state;
     return (
-      <App showNavigation={false} title="Login">
+      <App showNavigation={false} title='Login'>
         <Mutation
           mutation={LOGIN_MUTATION}
           onCompleted={() => this.handleSuccess()}
@@ -48,8 +48,7 @@ class LoginPage extends PureComponent {
             }
           }}
         >
-          {(login, { loading, error }) => {
-            return (
+          {(login, { loading, error }) => (
               <LoginContainer
                 error={error}
                 handleChange={this.handleChange}
@@ -58,8 +57,7 @@ class LoginPage extends PureComponent {
                 password={password}
                 loading={loading}
               />
-            );
-          }}
+          )}
         </Mutation>
       </App>
     );
