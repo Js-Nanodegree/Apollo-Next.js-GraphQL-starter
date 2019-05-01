@@ -19,11 +19,13 @@ export interface TinviteInput {
   message: string;
 }
 
-async function invite({ email, message }: TinviteInput, context: IContext) {
-  // Check that the email doesn't already exist in the subscribe model
-
+async function invite(
+  { email, message }: TinviteInput,
+  context: IContext
+): Promise<{ message: string | Error }> {
   const { user } = context.req;
 
+  /* Check that the email doesn't already exist in the subscribe model */
   const sub = await Invite.findOne({ email }).exec();
   if (sub) {
     throw new Error('That email has already been invited');
@@ -117,17 +119,14 @@ async function invite({ email, message }: TinviteInput, context: IContext) {
 export interface IgetInvitesInput {
   limit: number;
   skip: number;
-  sort_field: string;
-  sort_order: string;
+  sortField: string;
+  sortOrder: string;
 }
 
 function getInvites(
-  { limit, skip, sort_field, sort_order }: IgetInvitesInput,
+  { limit, skip, sortField, sortOrder }: IgetInvitesInput,
   context: IContext
 ): Promise<IInvite[] | []> {
-  const sortField = sort_field ? sort_field : 'createdAt';
-  const sortOrder = sort_order === 'DEC' ? -1 : 1;
-
   const { user } = context.req;
 
   if (!user) {
@@ -135,7 +134,9 @@ function getInvites(
   }
 
   return Invite.find({ inviter: user._id })
-    .sort({ [sortField]: sortOrder })
+    .sort({
+      [sortField ? sortField : 'createdAt']: sortOrder === 'DEC' ? -1 : 1
+    })
     .limit(limit || 10)
     .skip(skip || 0)
     .lean()

@@ -40,7 +40,7 @@ function deactivateSubscribeToken({
     );
 }
 
-interface TregisterInput {
+export interface IregisterInput {
   inviteToken: string;
   firstName: string;
   lastName: string;
@@ -57,9 +57,9 @@ async function register(
     _id,
     password,
     passwordRepeat
-  }: TregisterInput,
+  }: IregisterInput,
   context: IContext
-): Promise<any> {
+): Promise<{ token: string; message: string } | Error> {
   if (password !== passwordRepeat) {
     return Error('Passwords do not match');
   }
@@ -130,16 +130,12 @@ async function register(
     );
 }
 
-async function login(
-  {
-    email,
-    password
-  }: {
-    email: string;
-    password: string;
-  },
-  context: IContext
-) {
+export interface ILoginInput {
+  email: string;
+  password: string;
+}
+
+async function login({ email, password }: ILoginInput, context: IContext) {
   const user = await User.findOne({ email })
     .then(data => {
       return data;

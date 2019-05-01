@@ -15,8 +15,8 @@ type Query {
   Invites(
     limit: Int
     skip: Int
-    sort_field: String
-    sort_order: Sortorder
+    sortField: String
+    sortOrder: Sortorder
   ): [Invite]
 }
 

@@ -1,39 +1,24 @@
-import { Request, Response } from 'express';
-import { ApolloServer, IResolvers } from 'apollo-server-express';
+import { GraphQLError } from 'graphql';
+import { ApolloServer } from 'apollo-server-express';
 import { PubSub } from 'apollo-server-express';
-import { formatError } from 'apollo-errors';
 import resolvers from './resolvers';
 import typeDefs from './schema';
-
-interface TContext {
-  req: Request;
-  res: Response;
-}
-
-interface TInfo {
-  queryString: string;
-}
-
-// const options = {
-//   formatError
-// };
+import { IContext } from 'generic';
 
 export const pubsub = new PubSub();
 
 export default new ApolloServer({
   typeDefs,
   resolvers,
-  // options,
-  formatError: (error: Error) => {
+  /*
+   * GraphQL errors can be formatted into any shape you want. Available fields are on GraphQLError
+   */
+  formatError: (error: GraphQLError) => {
+    // eslint-disable-next-line
     console.log(error);
     return error;
   },
-  formatResponse: (response: any, info: TInfo) => {
-    console.log('--------------------------------------');
-    console.log(info.queryString);
-    return response;
-  },
-  context: ({ req, res }: TContext) => {
+  context: ({ req, res }: IContext) => {
     return { req, res };
   }
 });
