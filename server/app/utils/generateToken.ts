@@ -8,7 +8,7 @@ interface TgenerateTokenInput {
   _id: IUser['_id'];
 }
 
-function generateToken({ _id }: TgenerateTokenInput) {
+function generateToken({ _id }: TgenerateTokenInput): string {
   const claims = {
     iss: IS_DEBUG ? DEV_URL : PROD_URL, // The URL of your service - update paths in ../config/settings
     sub: _id // The UID of the user in your system - MongoDB _id

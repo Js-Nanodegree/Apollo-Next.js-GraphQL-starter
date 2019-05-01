@@ -2,9 +2,9 @@ import { Request, Response } from 'express';
 import * as mongoose from 'mongoose';
 import { IUser } from '../models/user.model';
 
-export type TObjectId = {
+export interface TObjectId {
   _id: mongoose.Types.ObjectId;
-};
+}
 
 interface Error {
   stack?: string;

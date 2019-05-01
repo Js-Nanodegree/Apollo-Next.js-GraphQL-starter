@@ -1,3 +1,5 @@
+/* eslint-ignore @typescript-eslint/explicit-function-return-type */
+
 import generateToken from '../generateToken';
 
 describe('Generate authentication token', () => {

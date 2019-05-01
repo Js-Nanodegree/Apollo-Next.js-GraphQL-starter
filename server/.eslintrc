@@ -1,30 +1,38 @@
 {
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended",
+    "plugin:jest/recommended"
+  ],
+  "plugins": ["prettier", "jest"],
   "env": {
     "node": true,
     "mocha": true,
     "es6": true
   },
   "parserOptions": {
-    "ecmaVersion": 2017,
+    "ecmaVersion": 2018,
     "sourceType": "module",
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true
     }
   },
   "rules": {
+    "prettier/prettier": ["error", { "singleQuote": true }],
     "comma-dangle": 2,
-    "object-curly-spacing": 2,
+    "object-curly-spacing": 0,
     "arrow-body-style": ["error", "always"],
     "no-unused-vars": 2,
     "no-unused-labels": 2,
     "no-console": 2,
     "no-undef": 2,
-    "node/no-missing-import": "error",
-    "quotes": ["error", "single"]
+    "quotes": ["error", "single"],
+    "@typescript-eslint/interface-name-prefix": 0,
+    "@typescript-eslint/explicit-function-return-type": "off"
   },
   "globals": {
-    "__DEVSERVER__": true,
-    "__DEVCLIENT__": true
+    "__DEVSERVER__": true
   }
 }
