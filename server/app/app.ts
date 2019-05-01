@@ -1,10 +1,11 @@
+import http from 'http';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import express from 'express';
 import loggaroo from 'loggaroo';
 import logger from 'morgan';
 import ApolloServer from './graphql';
-import { ENV } from './config/env';
+import { ENV, IS_DEBUG } from './config/env';
 import connect from './init/connect';
 import deserialiseUser from './middleware/deserialiseUser';
 import methodOverride from 'method-override';
@@ -14,25 +15,29 @@ const app = express();
 
 const debug = require('debug')('apily:server');
 
-app.use(
-  logger(function(tokens, req, res) {
-    return [
-      tokens.method(req, res),
-      tokens.url(req, res),
-      tokens.status(req, res),
-      tokens.res(req, res, 'content-length'),
-      '-',
-      tokens['response-time'](req, res),
-      'ms'
-    ].join(' ');
-  })
-);
+if (IS_DEBUG) {
+  /*
+   * Logs all requests coming in while in development mode.
+   */
+  app.use(
+    logger(function(tokens, req, res) {
+      return [
+        tokens.method(req, res),
+        tokens.url(req, res),
+        tokens.status(req, res),
+        tokens.res(req, res, 'content-length'),
+        '-',
+        tokens['response-time'](req, res),
+        'ms'
+      ].join(' ');
+    })
+  );
+}
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride());
 app.use(cookieParser());
-
-const http = require('http');
 
 app.set('port', port);
 
@@ -41,7 +46,7 @@ const server = http.createServer(app);
 function onListening() {
   const addr = server.address();
   loggaroo.info(
-    'Server running on port ' + addr.port + ' in ' + ENV + ' mode.'
+    `Server running on  http://localhost${port}/graphql in ${ENV} mode.`
   );
   const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);

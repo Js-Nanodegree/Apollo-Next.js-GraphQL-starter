@@ -25,14 +25,17 @@ export default async ({ email, _id, token, inviter }: IinviteMailerInput) => {
 
   const URL = IS_DEBUG ? DEV_URL : PROD_URL;
 
+  // TODO generating emails should be modularised
   const html = await ejs.renderFile(
     template,
     {
       _id,
       token,
-      URL
+      URL,
+      inviter
     },
     {},
+    /*eslint-disable-next-line */
     function(err: Error, resultPromise: any) {
       if (err) {
         return err;

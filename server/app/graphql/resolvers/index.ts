@@ -12,7 +12,7 @@ interface TObject {
   resolveType: string;
 }
 
-const resolvers = {
+const resolvers: IResolvers = {
   Node: {
     __resolveType(obj: TObject) {
       if (obj.resolveType) {
@@ -28,11 +28,13 @@ const resolvers = {
   Subscription: {
     ...inviteSubscriptions
   },
+  /* eslint-disable-next-line */
   Mutation: {
     ...authMutations,
     ...userMutations,
     ...inviteMutation
   } as IResolvers,
+  /* eslint-disable-next-line */
   Query: {
     ...authQueries,
     ...userQueries,
