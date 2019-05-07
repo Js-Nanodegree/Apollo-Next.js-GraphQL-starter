@@ -1,3 +1,9 @@
+# Apollo GraphQL starter pack
+
+[![GitHub license](https://img.shields.io/github/license/tomanagle/Apollo-Next.js-GraphQL-starter.svg)](https://github.com/tomanagle/Apollo-Next.js-GraphQL-starter/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/tomanagle/Apollo-Next.js-GraphQL-starter.svg)](https://github.com/tomanagle/Apollo-Next.js-GraphQL-starter/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/tomanagle/Apollo-Next.js-GraphQL-starter.svg)](https://github.com/tomanagle/Apollo-Next.js-GraphQL-starter/network)
+
 ## Features
 
 - [x] Server Side Rendering (SSR)
