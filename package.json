@@ -1,5 +1,5 @@
 {
-  "name": "Apollo-Server-GraphQL-starter",
+  "name": "apollo-server-graphql-starter",
   "version": "1.0.0",
   "description": "A lightweight GraphQL API starter pack",
   "keywords": [
@@ -15,18 +15,9 @@
   "email": "tomanagle@gmail.com",
   "scripts": {
     "dev:server": "npm run --prefix server dev",
-    "dev:client": "npm --prefix client start",
+    "dev:frontend": "npm run --prefix frontend dev",
     "deploy": "npm run --prefix server start && npm run --prefix frontend build",
-    "setup": "npm run --prefix server setup"
-  },
-  "dependencies": {
-    "apollo-link": "^1.2.4",
-    "apollo-link-batch-http": "^1.2.4",
-    "apollo-link-persisted-queries": "^0.2.2",
-    "apollo-link-state": "^0.4.2",
-    "apollo-link-ws": "^1.0.10",
-    "apollo-server-express": "^2.2.6",
-    "graphql": "^14.0.2",
-    "next-with-apollo": "^3.3.0"
+    "setup": "npm run --prefix server setup",
+    "test": "npm run --prefix server test"
   }
 }

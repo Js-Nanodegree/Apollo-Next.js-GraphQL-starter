@@ -12,13 +12,14 @@
   "env": {
     "browser": true,
     "node": true,
-    "jquery": true,
     "jest": true
   },
   "rules": {
+    "no-undefined": "error",
+    "no-unused-vars": 2,
+    "no-undef": 2,
     "no-debugger": 0,
     "no-alert": 2,
-    "no-unused-vars": 2,
     "prefer-const": [
       "error",
       {

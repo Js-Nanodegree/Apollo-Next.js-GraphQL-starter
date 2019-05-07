@@ -1,48 +1,26 @@
-import { DEV_URL, PROD_URL } from "../config/settings";
 import {
-  EmailAdreadyRegisteredError,
   InvalidEmailPasswordError,
   MissingRequiredFieldsError,
   NoUserError
-} from "./errors/auth.errors";
-import { IS_DEBUG, SESSION_DURATION } from "../config/env";
+} from './errors/auth.errors';
+import { SESSION_DURATION } from '../config/env';
+import Invite, { IInvite } from '../models/invite.model';
+import User from '../models/user.model';
+import { IContext } from '../types/generic';
+import generateToken from '../utils/generateToken';
 
-import { SIGNING_KEY } from "../config/secrets";
-import Subscribe from "../models/subscribe.model";
-import User from "../models/user.model";
-import crypto from "crypto";
-import moment from "moment";
-import nJwt from "njwt";
-import { subscribeMailer } from "../mailers";
-import { IContext } from "../types/generic";
-
-type TgenerateTokenInput = {
-  _id: string;
-};
-
-function generateToken(_: null, { _id }: TgenerateTokenInput) {
-  const claims = {
-    iss: IS_DEBUG ? DEV_URL : PROD_URL, // The URL of your service - update paths in ../config/settings
-    sub: _id // The UID of the user in your system - MongoDB _id
-  };
-
-  // This is our internal representation of the token, this is not what you'll send to your end user
-  const jwt = nJwt.create(claims, SIGNING_KEY);
-  jwt.setExpiration(new Date().getTime() + SESSION_DURATION);
-
-  // Base64 URL encoded string that is safe to pass to the browser
-  return jwt.compact();
+export interface SubscribeInput {
+  email: string;
 }
 
-type TdeactivateSubscribeTokenInput = {
+interface TdeactivateInviteTokenInput {
   email: string;
-};
+}
 
-function deactivateSubscribeToken(
-  _: null,
-  { email }: TdeactivateSubscribeTokenInput
-) {
-  return Subscribe.findOneAndUpdate(
+function deactivateSubscribeToken({
+  email
+}: TdeactivateInviteTokenInput): Promise<boolean | Error> {
+  return Invite.findOneAndUpdate(
     { email },
     {
       $set: {
@@ -50,36 +28,40 @@ function deactivateSubscribeToken(
       }
     }
   )
-    .then(() => {
-      return true;
-    })
-    .catch(error => {
-      return error;
-    });
+    .then(
+      (): boolean => {
+        return true;
+      }
+    )
+    .catch(
+      (error: Error): Error => {
+        throw error;
+      }
+    );
 }
-type TregisterInput = {
-  subscribeToken: string;
+
+export interface IregisterInput {
+  inviteToken: string;
   firstName: string;
   lastName: string;
   _id: string;
   password: string;
   passwordRepeat: string;
-};
+}
 
 async function register(
-  _: null,
   {
-    subscribeToken,
+    inviteToken,
     firstName,
     lastName,
     _id,
     password,
     passwordRepeat
-  }: TregisterInput,
+  }: IregisterInput,
   context: IContext
-) {
+): Promise<{ token: string; message: string } | Error> {
   if (password !== passwordRepeat) {
-    return Error("Passwords do not match");
+    return Error('Passwords do not match');
   }
   if (!firstName || !lastName || !password || !passwordRepeat) {
     throw new MissingRequiredFieldsError({
@@ -94,66 +76,71 @@ async function register(
     });
   }
 
-  const subscription = await Subscribe.findById(_id)
-    .then(data => {
-      return data;
-    })
-    .catch(error => {
+  const invite = await Invite.findById(_id)
+    .then(
+      (data): IInvite | null => {
+        return data;
+      }
+    )
+    .catch((error: Error) => {
       throw error;
     });
 
-  if (!subscription) {
-    return Error("You don't exist.");
+  if (!invite) {
+    return Error('You do not exist.');
   }
 
-  if (!subscription.active) {
-    return Error("You have already registered. Please login.");
+  if (!invite.active) {
+    return Error('You have already registered. Please login.');
   }
 
   // Check the subscribeToken to make sure it is valid
-  if (subscription.token !== subscribeToken) {
-    return Error("Invalid token.");
+  if (invite.token !== inviteToken) {
+    return Error('Invalid token.');
   }
 
   // Make sure you already use create here so the password is hashed with Mongoose's pre save middleware
   return User.create({
-    email: subscription.email,
+    email: invite.email,
     firstName,
     lastName,
     password
   })
-    .then(async user => {
-      const _id = user._id;
-      const token = await generateToken(null, { _id });
+    .then(
+      async (user): Promise<{ token: string; message: string }> => {
+        const _id = user._id;
+        const token = await generateToken({ _id });
 
-      // Change the active param to false on the subscribe token
-      deactivateSubscribeToken(_, { email: user.email });
+        // Change the active param to false on the subscribe token
+        deactivateSubscribeToken({ email: user.email });
 
-      // Set the token in a cookie
-      context.res.cookie("token", token, { maxAge: 3.154e10, httpOnly: true });
+        // Set the token in a cookie
+        context.res.cookie('token', token, {
+          maxAge: 3.154e10,
+          httpOnly: true
+        });
 
-      return { token, message: "Successfully registered" };
-    })
-    .catch(error => {
-      return error;
-    });
+        return { token, message: 'Successfully registered' };
+      }
+    )
+    .catch(
+      (error: Error): Error => {
+        return error;
+      }
+    );
 }
 
-type TLoginInput = {
+export interface ILoginInput {
   email: string;
   password: string;
-};
-async function login(
-  _: null,
-  { email, password }: TLoginInput,
-  context: IContext
-) {
+}
+
+async function login({ email, password }: ILoginInput, context: IContext) {
   const user = await User.findOne({ email })
     .then(data => {
       return data;
     })
-    .catch(error => {
-      console.log({ error });
+    .catch((error: Error) => {
       throw error;
     });
 
@@ -171,9 +158,9 @@ async function login(
     throw new InvalidEmailPasswordError();
   }
 
-  const token = await generateToken(_, { _id: user._id });
+  const token = await generateToken({ _id: user._id });
 
-  context.res.cookie("token", token, {
+  context.res.cookie('token', token, {
     maxAge: SESSION_DURATION,
     httpOnly: true
   });
@@ -181,71 +168,7 @@ async function login(
   return { token };
 }
 
-export interface ISubscribeInput {
-  email: string;
-}
-
-async function subscribe(_: null, { email }: ISubscribeInput) {
-  const subscriber = await Subscribe.findOne({ email })
-    .then(data => {
-      return data;
-    })
-    .catch(error => {
-      throw error;
-    });
-
-  const token = crypto.randomBytes(18).toString("hex");
-  if (subscriber && !subscriber.active) {
-    throw new EmailAdreadyRegisteredError({
-      data: {
-        email
-      }
-    });
-  }
-
-  const timeSinceLastEmail = subscriber
-    ? moment().diff(moment(subscriber.updatedAt), "milliseconds")
-    : 9e6;
-
-  // Only let the use send a new email every 15 minutes
-  const delayBeforeNewRequest = 15 * 60000;
-
-  if (timeSinceLastEmail <= delayBeforeNewRequest) {
-    const timeLeftBeforeNewRequest = delayBeforeNewRequest - timeSinceLastEmail;
-    return {
-      message: `Confirmation emails can only be sent every ${delayBeforeNewRequest /
-        60000} minutes.`
-    };
-  }
-
-  if (subscriber) {
-    return Subscribe.findOneAndUpdate({ _id: subscriber._id }, { token })
-      .then(() => {
-        subscribeMailer({ email, id: subscriber._id, token });
-
-        return {
-          message: `A new confirmation email has been sent to ${email}`
-        };
-      })
-      .catch(error => {
-        throw error;
-      });
-  }
-
-  return Subscribe.create({ email, token })
-    .then(data => {
-      // Send a verification email to the user
-      subscribeMailer({ email, id: data._id, token });
-
-      return { message: `A confirmation email as been sent to ${email}` };
-    })
-    .catch(error => {
-      return error;
-    });
-}
-
 export default {
   register,
-  subscribe,
   login
 };

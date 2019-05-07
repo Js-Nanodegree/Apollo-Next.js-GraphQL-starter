@@ -1,28 +1,38 @@
-import React, { Component } from 'react';
-
 import Head from 'next/head';
-import Loading from './Loading';
+import {
+  bool, string, node, oneOfType, arrayOf
+} from 'prop-types';
 import Navigation from './Navigation';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-import withData from '../lib/withData';
-import { withRouter } from 'next/router';
+import { MeProps } from './queries/Me.query';
 
-const App = ({ children, title, link, meta, showNavigation, Me }) => (
-  <div className="fullHeight">
+const App = ({
+  children, title, showNavigation, user
+}) => (
+  <div className='fullHeight'>
     <Head>
       <title>{title}</title>
-      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      <meta name='viewport' content='initial-scale=1.0, width=device-width' />
       <link
-        href="https://fonts.googleapis.com/css?family=Roboto:300,400"
-        rel="stylesheet"
+        href='https://fonts.googleapis.com/css?family=Roboto:300,400'
+        rel='stylesheet'
       />
     </Head>
 
-    {showNavigation ? <Navigation title={title} Me={Me} /> : null}
+    {showNavigation ? <Navigation title={title} user={user} /> : null}
 
-    <main id="main">{children}</main>
+    <main id='main'>{children}</main>
   </div>
 );
+
+App.propTypes = {
+  showNavigation: bool,
+  title: string.isRequired,
+  children: oneOfType([arrayOf(node), node]).isRequired,
+  user: MeProps
+};
+
+App.defaultProps = {
+  showNavigation: true
+};
 
 export default App;

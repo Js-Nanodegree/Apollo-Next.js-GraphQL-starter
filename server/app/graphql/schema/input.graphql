@@ -1,14 +1,10 @@
 input RegisterInput {
-  subscribeToken: String!
+  inviteToken: String!
   firstName: String!
   _id: String!
   lastName: String!
   password: String!
   passwordRepeat: String!
-}
-
-input SubscribeInput {
-  email: String!
 }
 
 input LoginInput {

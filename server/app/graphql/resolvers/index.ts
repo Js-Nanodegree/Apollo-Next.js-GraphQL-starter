@@ -1,14 +1,18 @@
+import { IResolvers } from 'apollo-server-express';
 import { IS_DEBUG } from '../../config/env';
 import authMutations from './auth.mutations';
 import authQueries from './auth.queries';
 import userMutations from './user.mutations';
 import userQueries from './user.queries';
+import inviteMutation from './invite.mutation';
+import inviteQueries from './invite.queries';
+import inviteSubscriptions from './invite.subscriptions';
 
-type TObject = {
+interface TObject {
   resolveType: string;
 }
 
-export default {
+const resolvers: IResolvers = {
   Node: {
     __resolveType(obj: TObject) {
       if (obj.resolveType) {
@@ -21,13 +25,21 @@ export default {
       return null;
     }
   },
-  Subscription: {},
+  Subscription: {
+    ...inviteSubscriptions
+  },
+  /* eslint-disable-next-line */
   Mutation: {
     ...authMutations,
-    ...userMutations
-  },
+    ...userMutations,
+    ...inviteMutation
+  } as IResolvers,
+  /* eslint-disable-next-line */
   Query: {
     ...authQueries,
-    ...userQueries
-  }
+    ...userQueries,
+    ...inviteQueries
+  } as IResolvers
 };
+
+export default resolvers;

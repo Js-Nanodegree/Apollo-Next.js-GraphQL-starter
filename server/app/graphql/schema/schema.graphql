@@ -5,14 +5,24 @@ schema {
 type Subscription {
   userAdded: User
 }
+enum Sortorder {
+  ASC
+  DEC
+}
 type Query {
   Me: User
-  Users: UsersQueryResponse
+  # Returns an array of invite objects that the requesting user has sent
+  Invites(
+    limit: Int
+    skip: Int
+    sortField: String
+    sortOrder: Sortorder
+  ): [Invite]
 }
 
 type Mutation {
-  Subscribe(input: SubscribeInput): SubscribeResponse # The user inputs their email and they are sent a confirmation email with a link to the registration page
-  Register(input: RegisterInput): RegisterResponse # The User fills in the firm and they are given a token on
-  Login(input: LoginInput): LoginResponse
   Invite(input: InviteInput): InviteResponse
+  # The User fills in the firm and they are given a token on
+  Register(input: RegisterInput): RegisterResponse
+  Login(input: LoginInput): LoginResponse
 }

@@ -1,11 +1,4 @@
-import { ApolloLink, Observable } from 'apollo-link';
-import {
-  CLIENT_PATH,
-  GRAPHQL_ENDPOINT,
-  SERVER_PATH,
-  WS_PATH
-} from '../config/env';
-
+import { ApolloLink, Observable, split } from 'apollo-link';
 import { ApolloClient } from 'apollo-client';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -13,14 +6,14 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { createPersistedQueryLink } from 'apollo-link-persisted-queries';
 import { getMainDefinition } from 'apollo-utilities';
 import { onError } from 'apollo-link-error';
-import { split } from 'apollo-link';
 import withApollo from 'next-with-apollo';
 import { withClientState } from 'apollo-link-state';
+import { GRAPHQL_ENDPOINT, SERVER_PATH, WS_PATH } from '../config/env';
 
 function createClient({ headers }) {
   const cache = new InMemoryCache();
   const ssrMode = !process.browser;
-  const request = async operation => {
+  const request = async (operation) => {
     operation.setContext({
       http: {
         includeExtensions: true,
@@ -31,24 +24,23 @@ function createClient({ headers }) {
   };
 
   const requestLink = new ApolloLink(
-    (operation, forward) =>
-      new Observable(observer => {
-        let handle;
-        Promise.resolve(operation)
-          .then(oper => request(oper))
-          .then(() => {
-            handle = forward(operation).subscribe({
-              next: observer.next.bind(observer),
-              error: observer.error.bind(observer),
-              complete: observer.complete.bind(observer)
-            });
-          })
-          .catch(observer.error.bind(observer));
+    (operation, forward) => new Observable((observer) => {
+      let handle;
+      Promise.resolve(operation)
+        .then(oper => request(oper))
+        .then(() => {
+          handle = forward(operation).subscribe({
+            next: observer.next.bind(observer),
+            error: observer.error.bind(observer),
+            complete: observer.complete.bind(observer)
+          });
+        })
+        .catch(observer.error.bind(observer));
 
-        return () => {
-          if (handle) handle.unsubscribe();
-        };
-      })
+      return () => {
+        if (handle) handle.unsubscribe();
+      };
+    })
   );
 
   const httpLink = new BatchHttpLink({
@@ -59,14 +51,15 @@ function createClient({ headers }) {
   // Make sure the wsLink is only created on the browser. The server doesn't have a native implemention for websockets
   const wsLink = process.browser
     ? new WebSocketLink({
-        uri: WS_PATH,
-        options: {
-          reconnect: true
-        }
-      })
+      uri: WS_PATH,
+      options: {
+        reconnect: true
+      }
+    })
     : () => {
-        console.log('Is server');
-      };
+      // eslint-disable-next-line no-console
+      console.log('Is server');
+    };
 
   // Let Apollo figure out if the request is over ws or http
   const terminatingLink = split(
@@ -85,9 +78,11 @@ function createClient({ headers }) {
     link: ApolloLink.from([
       onError(({ graphQLErrors, networkError }) => {
         if (graphQLErrors) {
+          // eslint-disable-next-line no-console
           console.error({ graphQLErrors });
         }
         if (networkError) {
+          // eslint-disable-next-line no-console
           console.error({ networkError });
         }
       }),
@@ -98,6 +93,7 @@ function createClient({ headers }) {
         },
         resolvers: {
           Mutation: {
+            // eslint-disable-next-line no-shadow
             updateNetworkStatus: (_, { isConnected }, { cache }) => {
               cache.writeData({ data: { isConnected } });
               return null;
@@ -109,15 +105,7 @@ function createClient({ headers }) {
       }),
 
       // Push the links into the Apollo client
-      createPersistedQueryLink().concat(
-        // New config
-        terminatingLink
-        // Old config
-        // new BatchHttpLink({
-        //   uri: GRAPHQL_ENDPOINT,
-        //   credentials: 'include'
-        // })
-      )
+      createPersistedQueryLink().concat(terminatingLink)
     ]),
     cache
   });

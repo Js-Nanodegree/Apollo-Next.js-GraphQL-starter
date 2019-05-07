@@ -1,8 +1,8 @@
-import bcrypt from "bcrypt-nodejs";
-import mongoose, { HookNextFunction, Document } from "mongoose";
-import timestamp from "mongoose-timestamp";
-import validator from "validator";
-import permalink from "mongoose-permalink";
+import bcrypt from 'bcrypt-nodejs';
+import mongoose, { HookNextFunction, Document } from 'mongoose';
+import timestamp from 'mongoose-timestamp';
+import validator from 'validator';
+import permalink from 'mongoose-permalink';
 
 export interface IUser extends Document {
   email: string;
@@ -36,32 +36,39 @@ const UserSchema = new mongoose.Schema({
   resetPasswordExpires: Date
 });
 
-function encryptPassword(next: HookNextFunction) {
+function encryptPassword(this: IUser, next: HookNextFunction) {
   try {
     const user = this;
-    if (!user.isModified("password")) {
+    if (!user.isModified('password')) {
       return next();
     }
     return bcrypt.genSalt(5, (saltErr, salt) => {
       if (saltErr) return next(saltErr);
-      return bcrypt.hash(user.password, salt, null, (hashErr, hash) => {
-        if (hashErr) return next(hashErr);
-        user.password = hash;
-        return next();
-      });
+      return bcrypt.hash(
+        user.password,
+        salt,
+        () => {
+          return;
+        },
+        (hashErr: Error, hash: string) => {
+          if (hashErr) return next(hashErr);
+          user.password = hash;
+          return next();
+        }
+      );
     });
   } catch (error) {
     return next(error);
   }
 }
 
-function validateEmail(next: HookNextFunction) {
+function validateEmail(this: IUser, next: HookNextFunction) {
   try {
     const user = this;
     if (validator.isEmail(user.email)) {
       return next();
     }
-    return next(new Error("Invalid email address"));
+    return next(new Error('Invalid email address'));
   } catch (e) {
     return next(e);
   }
@@ -70,11 +77,11 @@ function validateEmail(next: HookNextFunction) {
 /* ==================================================================
 Remove fields from the schema before they are sent back to the user
 ================================================================== */
-UserSchema.pre("save", encryptPassword);
-UserSchema.pre("save", validateEmail);
+UserSchema.pre('save', encryptPassword);
+UserSchema.pre('save', validateEmail);
 
 UserSchema.plugin(permalink, {
-  sources: ["firstName", "lastName"]
+  sources: ['firstName', 'lastName']
 });
 
 UserSchema.plugin(timestamp);
@@ -98,4 +105,4 @@ UserSchema.methods.comparePassword = function(
   });
 };
 
-export default mongoose.model<IUserModel>("User", UserSchema);
+export default mongoose.model<IUserModel>('User', UserSchema);

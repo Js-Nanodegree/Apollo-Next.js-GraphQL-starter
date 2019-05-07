@@ -8,9 +8,44 @@ import {
 import { SheetsRegistry } from 'jss';
 
 const theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: '#FF973F',
+      main: '#ef7d25',
+      dark: '#D6640C',
+      contrastText: '#FFFFFF'
+    },
+    background: {
+      default: '#FFFFFF'
+    },
+    secondary: {
+      light: '#1AA899',
+      main: '#008e7f',
+      dark: '#007566'
+    }
+  },
+  shape: {
+    borderRadius: 3
+  },
   typography: {
-    useNextVariants: true,
-    htmlFontSize: 10 // Set the base font size to 10
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+    htmlFontSize: 10,
+    fontFamily: ['Roboto', 'sans-serif'].join(','),
+    h1: {
+      fontSize: '4.4rem'
+    },
+    h5: {
+      fontWeight: 300,
+      fontSize: '1.5rem',
+      lineHeight: 1.33,
+      letterSpacing: '0em'
+    },
+    button: {
+      fontSize: '1.4rem'
+    },
+    useNextVariants: true
   }
 });
 

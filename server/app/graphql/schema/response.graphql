@@ -13,9 +13,3 @@ type LoginResponse {
 type InviteResponse {
   message: String!
 }
-
-type UsersQueryResponse {
-  message: String!
-  count: Number!
-  nodes: [User]
-}

@@ -1,15 +1,19 @@
-import Controller from "../../controllers/auth.controller";
-import { IContext } from "../../types/generic";
-import { Context } from "apollo-server-core";
-
-export default {
-  Subscribe: (_: null, { input }: any) => {
-    return Controller.subscribe(_, { ...input });
+import Controller, {
+  ILoginInput,
+  IregisterInput
+} from '../../controllers/auth.controller';
+import { IContext } from '../../types/generic';
+const Mutation = {
+  Register: (
+    _: null,
+    { input }: { input: IregisterInput },
+    context: IContext
+  ) => {
+    return Controller.register({ ...input }, context);
   },
-  Register: (_: null, { input }: any, context: IContext) => {
-    return Controller.register(_, { ...input }, context);
-  },
-  Login: (_: null, { input }: any, context: Context) => {
-    return Controller.login(_, { ...input }, context);
+  Login: (_: null, input: ILoginInput, context: IContext) => {
+    return Controller.login({ ...input }, context);
   }
 };
+
+export default Mutation;
