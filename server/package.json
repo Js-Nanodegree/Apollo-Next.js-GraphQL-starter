@@ -19,7 +19,9 @@
     "tsc": "tsc",
     "build": "yarn tsc && cpx 'app/graphql/schema/*.graphql' 'dist/graphql/schema'",
     "test": "jest",
-    "setup": "node ./node_modules/babel-cli/bin/babel-node.js app/setup.js"
+    "setup": "node ./node_modules/babel-cli/bin/babel-node.js app/setup.js",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
     "@babel/core": "^7.4.3",
@@ -45,17 +47,18 @@
     "mailgun-js": "^0.20.0",
     "method-override": "^2.3.10",
     "moment": "^2.22.2",
-    "mongoose": "^5.2.9",
+    "mongoose": "^5.2.12",
     "mongoose-field-remover": "0.0.3",
     "mongoose-permalink": "^2.0.0",
     "mongoose-timestamp": "^0.6.0",
     "morgan": "^1.9.0",
-    "njwt": "^0.4.0",
+    "njwt": "^1.0.0",
     "passport": "^0.4.0",
     "passport-github": "^1.1.0",
     "shortid": "^2.2.12",
     "validator": "^9.2.0",
-    "winston": "^3.0.0"
+    "winston": "^3.0.0",
+    "snyk": "^1.161.2"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.4.3",
