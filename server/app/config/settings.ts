@@ -20,3 +20,5 @@ export const SYSTEM_EMAIL_ADDRESS = process.env.SYSTEM_EMAIL_ADDRESS;
 
 // Emails will be sent to this address in debug mode
 export const DEBUG_EMAIL_ADDRESS = process.env.DEBUG_EMAIL_ADDRESS;
+
+export const TEST_DB = 'mongodb://localhost/test';
