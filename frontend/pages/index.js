@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import App from '../components/App';
+import Container from '../components/Container';
 
 class HomePage extends Component {
   static propTypes = {};
@@ -12,9 +13,9 @@ class HomePage extends Component {
   render() {
     return (
       <App showNavigation title='Home'>
-        <div>
+        <Container>
           <h1>Home</h1>
-        </div>
+        </Container>
       </App>
     );
   }

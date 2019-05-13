@@ -15,29 +15,6 @@ import PreRegisterContainer from '../containers/PreRegister';
 import RegisterContainer from '../containers/Register';
 import App from '../components/App';
 
-const Outer = styled.div`
-  width: 100%;
-  height: 100%;
-  padding: 1.5rem;
-  display: flex;
-  align-content: center;
-  align-items: center;
-  flex-direction: column;
-`;
-
-const Inner = styled(Paper)`
-  width: 100%;
-  max-width: 50rem;
-  margin: 0 auto;
-  padding: 1.5rem;
-`;
-
-const Wrapper = ({ children }) => (
-  <Outer>
-    <Inner>{children}</Inner>
-  </Outer>
-);
-
 const INVITE_MUTATION = gql`
   mutation Invite($input: InviteInput) {
     Invite(input: $input) {
@@ -111,19 +88,17 @@ class RegisterPage extends PureComponent {
             }}
           >
             {(register, { loading, error, called }) => (
-              <Wrapper>
-                <RegisterContainer
-                  loading={loading}
-                  called={called}
-                  register={register}
-                  handleChange={this.handleChange}
-                  error={error}
-                  firstName={firstName}
-                  lastName={lastName}
-                  password={password}
-                  passwordRepeat={passwordRepeat}
-                />
-              </Wrapper>
+              <RegisterContainer
+                loading={loading}
+                called={called}
+                register={register}
+                handleChange={this.handleChange}
+                error={error}
+                firstName={firstName}
+                lastName={lastName}
+                password={password}
+                passwordRepeat={passwordRepeat}
+              />
             )}
           </Mutation>
         </App>
@@ -134,25 +109,19 @@ class RegisterPage extends PureComponent {
       <App showNavigation={false} title='Register'>
         <Mutation mutation={INVITE_MUTATION} variables={{ input: { email } }}>
           {(invite, { loading, error, called }) => (
-            <Wrapper>
-              <PreRegisterContainer
-                invite={invite}
-                handleChange={this.handleChange}
-                email={email}
-                loading={loading}
-                error={error}
-                called={called}
-              />
-            </Wrapper>
+            <PreRegisterContainer
+              invite={invite}
+              handleChange={this.handleChange}
+              email={email}
+              loading={loading}
+              error={error}
+              called={called}
+            />
           )}
         </Mutation>
       </App>
     );
   }
 }
-
-Wrapper.propTypes = {
-  children: oneOfType([arrayOf(node), node]).isRequired
-};
 
 export default RegisterPage;

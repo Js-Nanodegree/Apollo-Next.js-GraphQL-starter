@@ -1,3 +1,5 @@
-const InviteContainer = () => <div>InviteContainer</div>;
+import Container from '../components/Container';
+
+const InviteContainer = () => <Container>InviteContainer</Container>;
 
 export default InviteContainer;

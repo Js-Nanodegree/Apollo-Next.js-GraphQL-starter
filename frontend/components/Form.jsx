@@ -1,0 +1,18 @@
+import styled from 'styled-components';
+
+const Form = styled.form`
+  padding: 1.5rem;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  width: 100%;
+  max-width: 45rem;
+  margin: 0 auto;
+
+  h1 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+  }
+`;
+
+export default Form;
