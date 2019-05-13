@@ -10,18 +10,18 @@ import { SheetsRegistry } from 'jss';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      light: '#FF973F',
-      main: '#ef7d25',
-      dark: '#D6640C',
+      light: '#61949F',
+      main: '#366E7B',
+      dark: '#1F515F',
       contrastText: '#FFFFFF'
     },
     background: {
       default: '#FFFFFF'
     },
     secondary: {
-      light: '#1AA899',
-      main: '#008e7f',
-      dark: '#007566'
+      light: '#6CDDFF',
+      main: '#39D2FF',
+      dark: '#1FCCFF'
     }
   },
   shape: {

@@ -4,7 +4,8 @@ import {
   bool, string, func, array
 } from 'prop-types';
 import TextField from '@material-ui/core/TextField';
-import FormWrapper from '../components/FormWrapper';
+import Form from '../components/Form';
+import Container from '../components/Container';
 
 const RegisterContainer = ({
   handleChange,
@@ -37,77 +38,70 @@ const RegisterContainer = ({
   }
 
   return (
-    <FormWrapper>
-      <div className='content-middle'>
-        <form
-          className='form-wrapper'
-          onSubmit={(e) => {
-            e.preventDefault();
-            return register();
-          }}
+    <Container>
+      <Form
+        onSubmit={(e) => {
+          e.preventDefault();
+          return register();
+        }}
+      >
+        <h1>Complete your registration</h1>
+        <TextField
+          fullWidth
+          onChange={handleChange}
+          name='firstName'
+          value={firstName}
+          label='First name'
+          autoComplete='first-name'
+        />
+        <br />
+        <TextField
+          fullWidth
+          onChange={handleChange}
+          name='lastName'
+          value={lastName}
+          label='Last name'
+          autoComplete='last-name'
+        />
+        <br />
+        <TextField
+          fullWidth
+          onChange={handleChange}
+          name='password'
+          value={password}
+          label='Password'
+          type='password'
+          autoComplete='new-password'
+        />
+        <br />
+        <TextField
+          fullWidth
+          error={!!password && !!passwordRepeat && password !== passwordRepeat}
+          onChange={handleChange}
+          name='passwordRepeat'
+          value={passwordRepeat}
+          label='Repeat password'
+          type='password'
+          autoComplete='repeat-password'
+        />
+        <br />
+        <br />
+        <Button
+          fullWidth
+          disabled={
+            !firstName
+            || !lastName
+            || !password
+            || !passwordRepeat
+            || !(password === passwordRepeat)
+            || loading
+          }
+          type='submit'
         >
-          <div className='form__inner'>
-            <h1>Complete your registration</h1>
-            <TextField
-              fullWidth
-              onChange={handleChange}
-              name='firstName'
-              value={firstName}
-              label='First name'
-              autoComplete='first-name'
-            />
-            <br />
-            <TextField
-              fullWidth
-              onChange={handleChange}
-              name='lastName'
-              value={lastName}
-              label='Last name'
-              autoComplete='last-name'
-            />
-            <br />
-            <TextField
-              fullWidth
-              onChange={handleChange}
-              name='password'
-              value={password}
-              label='Password'
-              type='password'
-              autoComplete='new-password'
-            />
-            <br />
-            <TextField
-              fullWidth
-              error={
-                !!password && !!passwordRepeat && password !== passwordRepeat
-              }
-              onChange={handleChange}
-              name='passwordRepeat'
-              value={passwordRepeat}
-              label='Repeat password'
-              type='password'
-              autoComplete='repeat-password'
-            />
-            <br />
-            <br />
-            <Button
-              fullWidth
-              disabled={
-                !firstName
-                || !lastName
-                || !password
-                || !passwordRepeat
-                || !(password === passwordRepeat)
-                || loading
-              }
-              type='submit'
-            >
-              {loading ? 'REGISTERING' : 'REGISTER'}
-            </Button>
-          </div>
-        </form>
-      </div>
-    </FormWrapper>
+          {loading ? 'REGISTERING' : 'REGISTER'}
+        </Button>
+      </Form>
+    </Container>
   );
 };
 
