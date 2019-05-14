@@ -41,7 +41,6 @@ class MyApp extends App {
               sheetsManager={this.pageContext.sheetsManager}
             >
               <CssBaseline />
-
               <Component pageContext={this.pageContext} {...pageProps} />
             </MuiThemeProvider>
           </JssProvider>
