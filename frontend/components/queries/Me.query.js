@@ -1,6 +1,5 @@
 import { shape, string, func } from 'prop-types';
 import { Query } from 'react-apollo';
-
 import { CURRENT_USER_QUERY } from '../../constants/queries';
 
 export const MeProps = shape({

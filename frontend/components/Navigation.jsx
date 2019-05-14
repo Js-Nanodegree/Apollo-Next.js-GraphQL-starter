@@ -21,7 +21,7 @@ class Navigation extends Component {
     const { title } = this.props;
 
     return (
-      <Fragment>
+      <>
         <NavContainer position='static' classes={{ root: 'nav-container' }}>
           <Toolbar>
             <Typography color='inherit' style={{ flexGrow: 1 }}>
@@ -54,7 +54,7 @@ class Navigation extends Component {
             </Me>
           </Toolbar>
         </NavContainer>
-      </Fragment>
+      </>
     );
   }
 }
