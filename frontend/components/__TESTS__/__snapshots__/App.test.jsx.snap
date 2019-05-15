@@ -4,6 +4,94 @@ exports[`App component should match snap shot 1`] = `
 <div
   className="fullHeight"
 >
+  <header
+    className="MuiPaper-root-10 MuiPaper-elevation4-16 MuiAppBar-root-1 nav-container MuiAppBar-positionStatic-5 MuiAppBar-colorPrimary-8 ff7z3s-0 ixKqbe"
+  >
+    <div
+      className="MuiToolbar-root-37 MuiToolbar-regular-39 MuiToolbar-gutters-38"
+    >
+      <p
+        className="MuiTypography-root-41 MuiTypography-body1-50 MuiTypography-colorInherit-70"
+        style={
+          Object {
+            "flexGrow": 1,
+          }
+        }
+      >
+        Test title
+      </p>
+      <button
+        className="MuiButtonBase-root-103 MuiButton-root-77 MuiButton-text-79 MuiButton-flat-82"
+        disabled={false}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onContextMenu={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        tabIndex="0"
+        type="button"
+      >
+        <span
+          className="MuiButton-label-78"
+        >
+          Login
+        </span>
+        <span
+          className="MuiTouchRipple-root-106"
+        />
+      </button>
+      <button
+        className="MuiButtonBase-root-103 MuiButton-root-77 MuiButton-text-79 MuiButton-flat-82"
+        disabled={false}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onContextMenu={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        tabIndex="0"
+        type="button"
+      >
+        <span
+          className="MuiButton-label-78"
+        >
+          Register
+        </span>
+        <span
+          className="MuiTouchRipple-root-106"
+        />
+      </button>
+    </div>
+  </header>
+  <main
+    id="main"
+  >
+    <div>
+      <p>
+        Test app children
+      </p>
+    </div>
+  </main>
+</div>
+`;
+
+exports[`App component should match snap shot 2`] = `
+<div
+  className="fullHeight"
+>
   <main
     id="main"
   >
