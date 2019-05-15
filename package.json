@@ -16,8 +16,10 @@
   "scripts": {
     "dev:server": "npm run --prefix server dev",
     "dev:frontend": "npm run --prefix frontend dev",
-    "deploy": "npm run --prefix server start && npm run --prefix frontend build",
+    "deploy": "npm run --prefix server deploy && npm run --prefix frontend deploy",
     "setup": "npm run --prefix server setup",
-    "test": "npm run --prefix server test"
+    "test:server": "npm run --prefix server test",
+    "test:frontend": "npm run --prefix frontend test",
+    "test": "npm run --prefix server test && npm run --prefix frontend test"
   }
 }

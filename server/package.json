@@ -14,11 +14,12 @@
   "scripts": {
     "lint": "eslint --ext .js,.ts ./app",
     "lint:fix": "eslint --ext .js,.ts ./app --fix",
-    "start": "npm run build && cross-env NODE_ENV=production pm2 start process.json",
+    "deploy": "npm run build && cross-env NODE_ENV=production pm2 start process.json",
     "dev": "nodemon",
     "tsc": "tsc",
     "build": "yarn tsc && cpx 'app/graphql/schema/*.graphql' 'dist/graphql/schema'",
     "test": "jest",
+    "test:watch": "jest --watch",
     "setup": "node ./node_modules/babel-cli/bin/babel-node.js app/setup.js",
     "snyk-protect": "snyk protect",
     "prepublish": "npm run snyk-protect"

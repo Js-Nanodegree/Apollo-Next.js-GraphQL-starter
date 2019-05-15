@@ -10,7 +10,8 @@
     "dev": "node server.js",
     "build": "next build",
     "start": "pm2 start process.json",
-    "test": "jest --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "deploy": "yarn build && yarn start"
   },
   "author": "Tom Nagle",
