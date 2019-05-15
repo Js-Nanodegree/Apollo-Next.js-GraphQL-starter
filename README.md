@@ -40,32 +40,6 @@ Both the client and server application have build commands that transpile the Ty
 
 Contributions in the form of PRs or issues are welcomed!
 
-## Development:
-
-#### Test
-
-`yarn test`
-
-#### Server
-
-cd the the root of the project and use the following commands.
-
-Run the development server with:
-
-`yarn dev:server`
-
-#### Client
-
-Run the development client with:
-
-`yarn dev:frontend`
-
-## Production:
-
-To deploy your application, cd to the root of your application and run
-
-`yarn deploy`
-
 ## Stack
 
 - MongoDB - Database
