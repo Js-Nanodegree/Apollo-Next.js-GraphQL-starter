@@ -1,5 +1,4 @@
 import path from 'path';
-import ejs from 'ejs-promise';
 import { IUser } from '../../models/user.model';
 import { IInvite } from '../../models/invite.model';
 import { IS_DEBUG } from '../../config/env';
@@ -9,8 +8,8 @@ import {
   DEV_URL,
   PROD_URL
 } from '../../config/settings';
-
 import sendEmail from '../helpers/sendEmail';
+import renderTemplate from '../helpers/renderTemplate';
 
 interface IinviteMailerInput {
   email: IUser['email'];
@@ -24,30 +23,20 @@ export default async ({ email, _id, token, inviter }: IinviteMailerInput) => {
 
   const URL = IS_DEBUG ? DEV_URL : PROD_URL;
 
-  // TODO generating emails should be modularised
-  const html = await ejs.renderFile(
-    template,
-    {
-      _id,
-      token,
-      URL,
-      inviter
-    },
-    {},
-    /*eslint-disable-next-line */
-    function(err: Error, resultPromise: any) {
-      if (err) {
-        return err;
-      }
-      return resultPromise
-        .then(function(result: string) {
-          return result;
-        })
-        .catch((error: Error) => {
-          throw error;
-        });
-    }
-  );
+  const params = {
+    _id,
+    token,
+    URL,
+    inviter
+  };
+
+  const html = await renderTemplate({ template, params })
+    .then(result => {
+      return result;
+    })
+    .catch(error => {
+      throw error;
+    });
 
   if (!html) {
     return Error('Email HTML could not be rendered');

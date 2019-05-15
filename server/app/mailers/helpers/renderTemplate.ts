@@ -9,7 +9,7 @@ interface IInput {
 const renderTemplate = async ({
   template,
   params
-}: IInput): Promise<Error | string> => {
+}: IInput): Promise<string> => {
   const file = fs.existsSync(template);
 
   // Throw an error if the file does not exist
