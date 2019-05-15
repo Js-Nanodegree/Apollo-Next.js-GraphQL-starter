@@ -10,5 +10,6 @@ export const SIGNING_KEY = process.env.SIGNING_KEY;
 
 export const MAILGUN_CONFIG = {
   apiKey: process.env.MAILGUN_KEY,
-  domain: process.env.MAILGUN_DOMAIN
+  domain: process.env.MAILGUN_DOMAIN,
+  testMode: process.env.NODE_ENV === 'test'
 };
