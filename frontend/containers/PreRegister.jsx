@@ -16,7 +16,6 @@ const PreRegisterContainer = ({
   email,
   loading,
   error
-  error
 }) => (
   <Container>
     {error && JSON.stringify(error)}
