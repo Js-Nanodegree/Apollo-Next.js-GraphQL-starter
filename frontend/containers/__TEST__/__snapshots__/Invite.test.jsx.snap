@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Invite container should match snap shot 1`] = `
+<div
+  className="qepopj-0 gBRnsH"
+>
+  InviteContainer
+</div>
+`;

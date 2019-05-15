@@ -57,6 +57,8 @@ const LoginContainer = ({
           color='primary'
           fullWidth
           onClick={handleLogin}
+          type='submit'
+          id='submit'
         >
           Login
         </Button>

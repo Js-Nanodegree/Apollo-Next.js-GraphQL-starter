@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home container should match snap shot 1`] = `
+<div
+  className="qepopj-0 gBRnsH"
+>
+  <h1>
+    Apollo starter
+  </h1>
+</div>
+`;
