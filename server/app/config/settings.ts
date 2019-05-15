@@ -16,9 +16,11 @@ export const DEV_URL = 'http://localhost:3000';
 export const PROD_URL = 'http://www.example.com';
 
 // Emails will come from this address
-export const SYSTEM_EMAIL_ADDRESS = process.env.SYSTEM_EMAIL_ADDRESS;
+export const SYSTEM_EMAIL_ADDRESS =
+  process.env.SYSTEM_EMAIL_ADDRESS || 'test@example.com';
 
 // Emails will be sent to this address in debug mode
-export const DEBUG_EMAIL_ADDRESS = process.env.DEBUG_EMAIL_ADDRESS;
+export const DEBUG_EMAIL_ADDRESS =
+  process.env.DEBUG_EMAIL_ADDRESS || 'test@example.com';
 
 export const TEST_DB = 'mongodb://localhost/test';

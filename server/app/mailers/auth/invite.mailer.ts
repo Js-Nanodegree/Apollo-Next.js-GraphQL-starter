@@ -2,7 +2,6 @@ import path from 'path';
 import ejs from 'ejs-promise';
 import { IUser } from '../../models/user.model';
 import { IInvite } from '../../models/invite.model';
-import { MAILGUN_CONFIG } from '../../config/secrets';
 import { IS_DEBUG } from '../../config/env';
 import {
   SYSTEM_EMAIL_ADDRESS,
@@ -11,7 +10,7 @@ import {
   PROD_URL
 } from '../../config/settings';
 
-const mailgun = require('mailgun-js')(MAILGUN_CONFIG);
+import sendEmail from '../helpers/sendEmail';
 
 interface IinviteMailerInput {
   email: IUser['email'];
@@ -54,16 +53,12 @@ export default async ({ email, _id, token, inviter }: IinviteMailerInput) => {
     return Error('Email HTML could not be rendered');
   }
 
-  const message = {
+  const data = {
     from: SYSTEM_EMAIL_ADDRESS,
     to: IS_DEBUG ? DEBUG_EMAIL_ADDRESS : email,
     subject: 'Please confirm your email address',
     html
   };
 
-  return mailgun.messages().send(message, (error: Error) => {
-    if (error) {
-      throw error;
-    }
-  });
+  return sendEmail(data);
 };
