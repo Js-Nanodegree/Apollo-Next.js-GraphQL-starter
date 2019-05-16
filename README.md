@@ -34,6 +34,8 @@
 
 ### Deploying the application
 
+Install PM2 with ``yarn add pm2 --global``
+
 Both the client and server application have build commands that transpile the TypeScript and ES6 into usable JavaScript. `yarn deploy` will build the server and front end applications, along with starting them with PM2.
 
 ## Contributing
