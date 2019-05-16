@@ -32,6 +32,7 @@
     "axios": "^0.18.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
+    "connect": "^3.6.6",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "cpx": "^1.5.0",
@@ -57,9 +58,9 @@
     "passport": "^0.4.0",
     "passport-github": "^1.1.0",
     "shortid": "^2.2.12",
+    "snyk": "^1.161.2",
     "validator": "^9.2.0",
-    "winston": "^3.0.0",
-    "snyk": "^1.161.2"
+    "winston": "^3.0.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.4.3",

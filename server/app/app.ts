@@ -1,7 +1,8 @@
 import http from 'http';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
-import express from 'express';
+import express, { Request, Response } from 'express';
+import { NextFunction } from 'connect';
 import loggaroo from 'loggaroo';
 import logger from 'morgan';
 import ApolloServer from './graphql';
@@ -83,13 +84,23 @@ function onError(error: IError) {
   }
 }
 
-//app.use(passport.initialize());
+/*
+ * Respond to OPTIONS requests with a 200
+ */
+app.use('/graphql', (req: Request, res: Response, next: NextFunction) => {
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  return next();
+});
 
 connect();
 
-// attaches the user to Express's req object
-// Available at req.user
-// Inside a graphql function, the user will be available at context.req.user
+/*
+ * Attaches the user to Express's req object
+ * Available at req.user
+ * Inside a graphql function, the user will be available at context.req.user
+ */
 app.use(deserialiseUser);
 
 ApolloServer.applyMiddleware({ app });
