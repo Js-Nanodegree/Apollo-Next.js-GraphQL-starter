@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "eventhub-client",
+      "name": "frontend",
       "script": "server.js",
       "watch": false,
       "env": {
