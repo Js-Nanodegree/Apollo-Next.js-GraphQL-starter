@@ -15,7 +15,7 @@
 - [x] CSS in JSX
 - [x] User registration and email verification
 - [x] TypeScript support
-- [ ] Nginx deployment configuration
+- [x] Nginx deployment configuration (nginx.conf)
 
 ## Getting started
 
