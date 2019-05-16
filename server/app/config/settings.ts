@@ -13,7 +13,7 @@ export const db =
 export const DEV_URL = 'http://localhost:3000';
 
 // The URL of the production client
-export const PROD_URL = 'http://www.example.com';
+export const PROD_URL = 'https://whaatgames.com';
 
 // Emails will come from this address
 export const SYSTEM_EMAIL_ADDRESS =
