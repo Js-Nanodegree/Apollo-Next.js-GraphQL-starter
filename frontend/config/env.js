@@ -9,7 +9,7 @@ export const CLIENT_PATH = 'https://example.com/graphql';
 
 const DEVELOPMENT_WS_PATH = 'ws://localhost:8080/graphql';
 
-const PRODUCTION_WS_PATH = 'wss://example.comgraphql';
+const PRODUCTION_WS_PATH = 'wss://example.com/graphql';
 
 export const IS_DEBUG = process.env.NODE_ENV !== 'production';
 
