@@ -5,13 +5,13 @@ exports[`App component should match snap shot 1`] = `
   className="fullHeight"
 >
   <header
-    className="MuiPaper-root-10 MuiPaper-elevation4-16 MuiAppBar-root-1 nav-container MuiAppBar-positionStatic-5 MuiAppBar-colorPrimary-8 ff7z3s-0 ixKqbe"
+    className="MuiPaper-root MuiPaper-elevation4 MuiAppBar-root nav-container MuiAppBar-positionStatic MuiAppBar-colorPrimary ff7z3s-0 ixKqbe"
   >
     <div
-      className="MuiToolbar-root-37 MuiToolbar-regular-39 MuiToolbar-gutters-38"
+      className="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"
     >
       <p
-        className="MuiTypography-root-41 MuiTypography-body1-50 MuiTypography-colorInherit-70"
+        className="MuiTypography-root MuiTypography-body1 MuiTypography-colorInherit"
         style={
           Object {
             "flexGrow": 1,
@@ -21,7 +21,7 @@ exports[`App component should match snap shot 1`] = `
         Test title
       </p>
       <button
-        className="MuiButtonBase-root-102 MuiButton-root-76 MuiButton-text-78 MuiButton-flat-81"
+        className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-flat"
         disabled={false}
         onBlur={[Function]}
         onClick={[Function]}
@@ -39,16 +39,16 @@ exports[`App component should match snap shot 1`] = `
         type="button"
       >
         <span
-          className="MuiButton-label-77"
+          className="MuiButton-label"
         >
           Login
         </span>
         <span
-          className="MuiTouchRipple-root-105"
+          className="MuiTouchRipple-root"
         />
       </button>
       <button
-        className="MuiButtonBase-root-102 MuiButton-root-76 MuiButton-text-78 MuiButton-flat-81"
+        className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-flat"
         disabled={false}
         onBlur={[Function]}
         onClick={[Function]}
@@ -66,12 +66,12 @@ exports[`App component should match snap shot 1`] = `
         type="button"
       >
         <span
-          className="MuiButton-label-77"
+          className="MuiButton-label"
         >
           Register
         </span>
         <span
-          className="MuiTouchRipple-root-105"
+          className="MuiTouchRipple-root"
         />
       </button>
     </div>

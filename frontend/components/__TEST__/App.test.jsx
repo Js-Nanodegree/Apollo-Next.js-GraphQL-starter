@@ -1,9 +1,9 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { shallow } from 'enzyme';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { CURRENT_USER_QUERY } from '../../constants/queries';
 import App from '../App';
+import TestJssProvider from '../../config/TestJssProvider';
 
 /*
  * Next router can only be used on the client so it needs to be mocked
@@ -32,11 +32,13 @@ describe('App component', () => {
     const withNavigation = renderer
       .create(
         <MockedProvider mocks={mocks}>
-          <App title={title} showNavigation>
-            <div>
-              <p>Test app children</p>
-            </div>
-          </App>
+          <TestJssProvider>
+            <App title={title} showNavigation>
+              <div>
+                <p>Test app children</p>
+              </div>
+            </App>
+          </TestJssProvider>
         </MockedProvider>
       )
       .toJSON();
@@ -45,28 +47,16 @@ describe('App component', () => {
 
     const noNavigation = renderer
       .create(
-        <App title={title} showNavigation={false}>
-          <div>
-            <p>Test app children</p>
-          </div>
-        </App>
+        <TestJssProvider>
+          <App title={title} showNavigation={false}>
+            <div>
+              <p>Test app children</p>
+            </div>
+          </App>
+        </TestJssProvider>
       )
       .toJSON();
 
     expect(noNavigation).toMatchSnapshot();
-  });
-
-  it('should render the page title', () => {
-    const title = 'Test title';
-
-    const wrapper = shallow(
-      <App title={title} showNavigation={false}>
-        <div>
-          <p>Test app children</p>
-        </div>
-      </App>
-    );
-
-    expect(wrapper.find('title').text()).toBe(title);
   });
 });
