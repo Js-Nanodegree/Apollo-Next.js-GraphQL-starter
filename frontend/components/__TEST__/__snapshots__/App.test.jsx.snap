@@ -21,7 +21,7 @@ exports[`App component should match snap shot 1`] = `
         Test title
       </p>
       <button
-        className="MuiButtonBase-root-103 MuiButton-root-77 MuiButton-text-79 MuiButton-flat-82"
+        className="MuiButtonBase-root-102 MuiButton-root-76 MuiButton-text-78 MuiButton-flat-81"
         disabled={false}
         onBlur={[Function]}
         onClick={[Function]}
@@ -39,16 +39,16 @@ exports[`App component should match snap shot 1`] = `
         type="button"
       >
         <span
-          className="MuiButton-label-78"
+          className="MuiButton-label-77"
         >
           Login
         </span>
         <span
-          className="MuiTouchRipple-root-106"
+          className="MuiTouchRipple-root-105"
         />
       </button>
       <button
-        className="MuiButtonBase-root-103 MuiButton-root-77 MuiButton-text-79 MuiButton-flat-82"
+        className="MuiButtonBase-root-102 MuiButton-root-76 MuiButton-text-78 MuiButton-flat-81"
         disabled={false}
         onBlur={[Function]}
         onClick={[Function]}
@@ -66,12 +66,12 @@ exports[`App component should match snap shot 1`] = `
         type="button"
       >
         <span
-          className="MuiButton-label-78"
+          className="MuiButton-label-77"
         >
           Register
         </span>
         <span
-          className="MuiTouchRipple-root-106"
+          className="MuiTouchRipple-root-105"
         />
       </button>
     </div>

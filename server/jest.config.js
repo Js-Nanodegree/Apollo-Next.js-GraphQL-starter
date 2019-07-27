@@ -3,7 +3,7 @@ module.exports = {
     '^.+\\.ts?$': 'ts-jest'
   },
   roots: ['<rootDir>/app'],
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  moduleFileExtensions: ['ts', 'js', 'json', 'node'],
   preset: 'ts-jest',
   testEnvironment: 'node'
 };
