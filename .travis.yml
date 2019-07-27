@@ -8,6 +8,11 @@ cache:
   directories:
     - node_modules
 install:
+  - cd server
+  - yarn install
+  - cd ../frontend
+  - yarn install
+  - cd ..
   - yarn global add jest
 script:
   - yarn test
