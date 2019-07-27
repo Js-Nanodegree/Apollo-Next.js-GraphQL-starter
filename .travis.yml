@@ -11,6 +11,7 @@ before_install:
   - npm update
 install:
   - 'cd server yarn install'
+  - 'cd ..'
   - 'cd frontend yarn install'
 script:
   - yarn test
