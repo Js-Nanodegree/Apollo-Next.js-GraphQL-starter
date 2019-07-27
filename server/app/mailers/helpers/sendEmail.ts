@@ -1,5 +1,5 @@
 import mailgun from '../../config/mailgun';
-import { resolve } from 'dns';
+
 interface IInput {
   from: string;
   to: string;
