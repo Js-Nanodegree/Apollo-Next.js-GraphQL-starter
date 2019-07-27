@@ -10,6 +10,7 @@ cache:
 before_install:
   - npm update
 install:
-  - 'npm run --prefix server npm i && npm run --prefix frontend npm i'
+  - 'cd server yarn install'
+  - 'cd frontend yarn install'
 script:
   - yarn test
