@@ -13,5 +13,7 @@ install:
   - 'cd server yarn install'
   - 'cd ..'
   - 'cd frontend yarn install'
+  - 'cd ..'
+  - 'yarn install jest --global'
 script:
   - yarn test
