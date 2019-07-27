@@ -7,13 +7,5 @@ branches:
 cache:
   directories:
     - node_modules
-before_install:
-  - npm update
-install:
-  - 'cd server yarn install'
-  - 'cd ..'
-  - 'cd frontend yarn install'
-  - 'cd ..'
-  - 'yarn global add jest'
 script:
   - yarn test
