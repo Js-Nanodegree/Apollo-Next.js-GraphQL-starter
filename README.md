@@ -17,6 +17,8 @@
 - [x] User registration and email verification
 - [x] TypeScript support
 - [x] Nginx deployment configuration (nginx.conf)
+- [ ] Use React Hooks
+- [ ] GraphQL Code Generator
 
 ## Getting started
 
