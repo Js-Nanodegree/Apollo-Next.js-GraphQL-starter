@@ -19,6 +19,7 @@
 - [x] Nginx deployment configuration (nginx.conf)
 - [ ] Use React Hooks
 - [ ] GraphQL Code Generator
+- [ ] Use React Testing Library
 
 ## Getting started
 
