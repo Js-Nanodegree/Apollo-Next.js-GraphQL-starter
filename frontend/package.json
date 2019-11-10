@@ -7,7 +7,7 @@
   "scripts": {
     "lint": "eslint --ext .js,.jsx ./",
     "lint:fix": "eslint --ext .js,.jsx ./ --fix",
-    "dev": "node server.js",
+    "dev": "next",
     "build": "next build",
     "start": "pm2 start process.json",
     "test": "jest",

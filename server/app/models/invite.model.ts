@@ -1,5 +1,4 @@
 import mongoose, { HookNextFunction, Document } from 'mongoose';
-import timestamp from 'mongoose-timestamp';
 import validator from 'validator';
 import { IUser } from './user.model';
 
@@ -12,13 +11,16 @@ export interface IInvite extends Document {
   inviter: IUser['_id'] | null;
 }
 
-const InviteSchema = new mongoose.Schema({
-  email: { type: String, unique: true, lowercase: true, required: true },
-  active: { type: Boolean, default: true },
-  token: { type: String, required: true },
-  message: String,
-  inviter: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-});
+const InviteSchema = new mongoose.Schema(
+  {
+    email: { type: String, unique: true, lowercase: true, required: true },
+    active: { type: Boolean, default: true },
+    token: { type: String, required: true },
+    message: String,
+    inviter: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+  },
+  { timestamps: true }
+);
 
 function validateEmail(
   this: IInvite,
@@ -36,7 +38,5 @@ function validateEmail(
 }
 
 InviteSchema.pre('save', validateEmail);
-
-InviteSchema.plugin(timestamp);
 
 export default mongoose.model<IInvite>('Invite', InviteSchema);

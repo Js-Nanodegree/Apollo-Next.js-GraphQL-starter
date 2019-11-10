@@ -2,7 +2,7 @@
   "apps": [
     {
       "name": "frontend",
-      "script": "server.js",
+      "script": "next",
       "watch": false,
       "env": {
         "NODE_ENV": "production"

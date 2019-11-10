@@ -47,7 +47,7 @@ const server = http.createServer(app);
 function onListening() {
   const addr = server.address();
   loggaroo.info(
-    `Server running on  http://localhost${port}/graphql in ${ENV} mode.`
+    `Server running on  http://localhost:${port}/graphql in ${ENV} mode.`
   );
   const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);

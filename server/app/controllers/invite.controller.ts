@@ -4,7 +4,7 @@ import moment from 'moment';
 import { UnauthorizedRequestError } from '../controllers/errors/auth.errors';
 import Invite, { IInvite } from '../models/invite.model';
 import { inviteMailer } from '../mailers';
-import { EmailAdreadyRegisteredError } from './errors/auth.errors';
+import { EmailAdlreadyRegisteredError } from './errors/auth.errors';
 
 /* Users can invite themselves to confirm their email address before registration,
  * or a user can invite another user. The workflow in either case is:
@@ -42,7 +42,7 @@ async function invite(
 
   /* If the invite isn't active the user has probanly already registered */
   if (invite && !invite.active) {
-    throw new EmailAdreadyRegisteredError({
+    throw new EmailAdlreadyRegisteredError({
       data: {
         email
       }
@@ -123,27 +123,6 @@ export interface IgetInvitesInput {
   sortOrder: string;
 }
 
-function getInvites(
-  { limit, skip, sortField, sortOrder }: IgetInvitesInput,
-  context: IContext
-): Promise<IInvite[] | []> {
-  const { user } = context.req;
-
-  if (!user) {
-    throw new UnauthorizedRequestError();
-  }
-
-  return Invite.find({ inviter: user._id })
-    .sort({
-      [sortField ? sortField : 'createdAt']: sortOrder === 'DEC' ? -1 : 1
-    })
-    .limit(limit || 10)
-    .skip(skip || 0)
-    .lean()
-    .exec();
-}
-
 export default {
-  invite,
-  getInvites
+  invite
 };

@@ -16,14 +16,17 @@ const InvalidEmailPasswordError = createError('InvalidEmailPasswordError', {
   message: 'That username or password is invalid.'
 });
 
-const EmailAdreadyRegisteredError = createError('EmailAdreadyRegisteredError', {
-  message: 'That email is already registered.'
-});
+const EmailAdlreadyRegisteredError = createError(
+  'EmailAdlreadyRegisteredError',
+  {
+    message: 'That email is already registered.'
+  }
+);
 
 export {
   UnauthorizedRequestError,
   NoUserError,
   InvalidEmailPasswordError,
   MissingRequiredFieldsError,
-  EmailAdreadyRegisteredError
+  EmailAdlreadyRegisteredError
 };
