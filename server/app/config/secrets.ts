@@ -6,10 +6,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export const SIGNING_KEY = process.env.SIGNING_KEY;
+import { IS_DEBUG, IS_TEST } from './env';
 
-export const MAILGUN_CONFIG = {
-  apiKey: process.env.MAILGUN_KEY,
-  domain: process.env.MAILGUN_DOMAIN,
-  testMode: process.env.NODE_ENV === 'test'
-};
+export const SIGNING_KEY =
+  IS_DEBUG || IS_TEST ? 'TEST_SIGNING_KEY' : process.env.SIGNING_KEY;
