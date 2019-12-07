@@ -68,7 +68,7 @@
     "jest": "^24.8.0",
     "jss": "^9.8.7",
     "moment": "^2.22.2",
-    "next": "^8.0.4",
+    "next": "^9.0.6",
     "next-manifest": "^1.6.0",
     "next-with-apollo": "^3.2.2",
     "prop-types": "^15.7.2",
